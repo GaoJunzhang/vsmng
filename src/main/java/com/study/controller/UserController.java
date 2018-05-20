@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -87,6 +89,41 @@ public class UserController {
           e.printStackTrace();
           return "fail";
       }
+    }
+    @RequestMapping(value = "/resetPassword")
+    public String resetPassword(Integer id) {
+        User user = userService.selectByKey(id);
+        if (user == null)
+            return "error";
+        try {
+            user.setEnable(1);
+            user.setPassword("888888");
+            PasswordHelper passwordHelper = new PasswordHelper();
+            passwordHelper.encryptPassword(user);
+            userService.updateEquipmentNoByUsername(user);
+            return "success";
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "fail";
+        }
+    }
+    @RequestMapping(value = "/updateCount")
+    public String updateCount(Integer sumcount,Integer ids[]){
+
+        List<User> users = new ArrayList<User>(ids.length);
+        for (int i=0;i<ids.length;i++){
+            User user = new User();
+            user.setId(ids[i]);
+            user.setSumcount(sumcount);
+            users.add(user);
+        }
+        try {
+            userService.batchUpdateCount(users);
+            return "success";
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "fail";
+        }
     }
 
 }

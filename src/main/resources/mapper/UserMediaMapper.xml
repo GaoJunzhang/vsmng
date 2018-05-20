@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.study.mapper.UserMediaMapper">
+    <resultMap id="BaseResultMap" type="com.study.model.UserMedia">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="uid" jdbcType="INTEGER" property="uid"/>
+        <result column="mid" jdbcType="INTEGER" property="mid"/>
+        <result column="playtime" jdbcType="TIMESTAMP" property="playtime"/>
+    </resultMap>
+    <select id="listByUid" parameterType="int" resultType="com.study.model.UserMedia">
+    select id,uid,mid,playtime form user_media where uid=#{uid} order by playtime desc
+  </select>
+    <select id="sumPalyCount" parameterType="int" resultType="java.lang.Integer">
+    select count(id) from user_media where uid=#{uid}
+  </select>
+    <select id="queryUserMediaByUname" resultType="com.study.bean.UsereMediaBean">
+        SELECT t.id,t.playtime,u.username,m.`name` as mediaName
+        from user_media t ,`user` u, media m
+        WHERE t.uid=u.id and t.mid=m.id
+        <if test="username!=null and username!=''">
+            and username like "%"#{username}"%"
+        </if>
+        <if test="startTime!=null and startTime!=''">
+            and t.playtime&gt;=#{startTime}
+        </if>
+        <if test="endTime!=null and endTime!=''">
+            and t.playtime&lt;= #{endTime}
+        </if>
+    </select>
+    <select id="sumPlayCount" resultType="int">
+        select count(id) from user_media
+        where uid=#{uid}
+    </select>
+    <select id="statisticsByYear" parameterType="java.lang.String" resultType="com.study.bean.MonthBean">
+        SELECT YEAR(playtime) annual,
+SUM(CASE WHEN MONTH(playtime) =1 THEN 1 ELSE 0 END) Jans,
+SUM(CASE WHEN MONTH(playtime) =2 THEN 1 ELSE 0 END) Febs,
+SUM(CASE WHEN MONTH(playtime) =3 THEN 1 ELSE 0 END) Mars,
+SUM(CASE WHEN MONTH(playtime) =4 THEN 1 ELSE 0 END) Aprs,
+SUM(CASE WHEN MONTH(playtime) =5 THEN 1 ELSE 0 END) Mays,
+SUM(CASE WHEN MONTH(playtime) =6 THEN 1 ELSE 0 END) Juns,
+SUM(CASE WHEN MONTH(playtime) =7 THEN 1 ELSE 0 END) Juls,
+SUM(CASE WHEN MONTH(playtime) =8 THEN 1 ELSE 0 END) Augs,
+SUM(CASE WHEN MONTH(playtime) =9 THEN 1 ELSE 0 END) Septs,
+SUM(CASE WHEN MONTH(playtime) =10 THEN 1 ELSE 0 END) Octs,
+SUM(CASE WHEN MONTH(playtime) =11 THEN 1 ELSE 0 END) Novs,
+SUM(CASE WHEN MONTH(playtime) =12 THEN 1 ELSE 0 END) Dects,
+COUNT(*) sumplay
+FROM user_media
+where YEAR(playtime)=#{year}
+ GROUP BY     YEAR(playtime)
+    </select>
+</mapper>

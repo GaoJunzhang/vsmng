@@ -62,8 +62,34 @@ public class HomeController {
         return "resources/resources";
     }
 
+    @RequestMapping("/500")
+    public String fornot(){
+        return "500";
+    }
     @RequestMapping("/403")
     public String forbidden(){
         return "403";
     }
+
+    @RequestMapping("/mediaPage")
+    public String viewMedias(){
+        return "media/medias";
+    }
+
+    @RequestMapping("/myMediaPage")
+    public String viewuserMedias(){
+        return "myMedia/myMedias";
+    }
+
+    @RequestMapping("/viewMymedia")
+    public String viewMymedia(){
+        return "userMedia/userMedias";
+    }
+
+    /*@RequestMapping("/userMedia")
+    public String viewMediaStatistics(){
+        return "userMedia/userMedia";
+    }*/
+
+
 }

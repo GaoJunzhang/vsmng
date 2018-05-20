@@ -3,8 +3,8 @@ package com.study.model;
 import javax.persistence.*;
 import java.io.Serializable;
 
-public class User implements Serializable{
-    private static final long serialVersionUID = -8736616045315083846L;
+public class User implements Serializable {
+    private static final long serialVersionUID = 8902216402437436035L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -17,6 +17,15 @@ public class User implements Serializable{
      * 是否启用
      */
     private Integer enable;
+
+    private Integer sumcount;
+
+    private String position;
+
+    @Column(name = "create_time")
+    private String createTime;
+
+    private String realyname;
 
     /**
      * @return id
@@ -78,13 +87,59 @@ public class User implements Serializable{
         this.enable = enable;
     }
 
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", username='" + username + '\'' +
-                ", password='" + password + '\'' +
-                ", enable=" + enable +
-                '}';
+    /**
+     * @return sumcount
+     */
+    public Integer getSumcount() {
+        return sumcount;
+    }
+
+    /**
+     * @param sumcount
+     */
+    public void setSumcount(Integer sumcount) {
+        this.sumcount = sumcount;
+    }
+
+    /**
+     * @return position
+     */
+    public String getPosition() {
+        return position;
+    }
+
+    /**
+     * @param position
+     */
+    public void setPosition(String position) {
+        this.position = position;
+    }
+
+    /**
+     * @return create_time
+     */
+    public String getCreateTime() {
+        return createTime;
+    }
+
+    /**
+     * @param createTime
+     */
+    public void setCreateTime(String createTime) {
+        this.createTime = createTime;
+    }
+
+    /**
+     * @return realyname
+     */
+    public String getRealyname() {
+        return realyname;
+    }
+
+    /**
+     * @param realyname
+     */
+    public void setRealyname(String realyname) {
+        this.realyname = realyname;
     }
 }
