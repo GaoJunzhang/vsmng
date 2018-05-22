@@ -226,7 +226,7 @@
                     <input type="hidden" id="id" name="id"/>
                     <div class="form-group">
                         <label class="control-label">权限次数:</label>
-                        <input type="text" class="form-control" name="username" id="sumcount" placeholder="请输入次数"/>
+                        <input type="number" class="form-control" name="sumcount-text" id="sumcount-text" placeholder="请输入次数"/>
                         <span class="btn-action single glyphicons circle_question_mark" data-toggle="tooltip"
                               data-placement="top" data-original-title="必填"><i></i></span>
                     </div>
@@ -244,7 +244,7 @@
 
 <!--Footer-part-->
 <div class="row-fluid">
-    <div id="footer" class="span12"> 2017 &copy; yqj <a href="http://themedesigner.in/">Themedesigner.in</a></div>
+    <div id="footer" class="span12"> 2018 &copy; ZERO <a href="/">霖度科技</a></div>
 </div>
 <!--end-Footer-part-->
 <script type="text/javascript" th:src="@{/js/jquery-1.11.2.min.js}"></script>
@@ -508,7 +508,12 @@
     }
 
     function setCount() {
-        var sumcount = $("#sumcount").val();
+        var sumcount = $("#sumcount-text").val();
+        if(sumcount.indexOf(".")!=-1||!Number.isInteger(parseInt(sumcount))){
+            return layer.msg('请输入整数', function () {
+                //关闭后的操作
+            });
+        }
         var ids = new Array();
         for(var i=0;i<$(".checkchild:checked").length;i++){
             ids.push($(".checkchild:checked")[i].value);

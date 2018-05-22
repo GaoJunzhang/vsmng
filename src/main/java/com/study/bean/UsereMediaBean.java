@@ -22,6 +22,8 @@ public class UsereMediaBean implements Serializable {
 
     private String mediaName;
 
+    private String usedPlayCount;
+
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     public Date getPlaytime() {
         return playtime;

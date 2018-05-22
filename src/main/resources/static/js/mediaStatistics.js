@@ -1,42 +1,33 @@
 var table;
-var table1;
-$(document).ready(function(){
+$(document).ready(function () {
+    $('.selectData').datepicker({
+        autoclose: true, //自动关闭
+        language: 'zh-CN',
+        beforeShowDay: $.noop,    //在显示日期之前调用的函数
+        calendarWeeks: false,     //是否显示今年是第几周
+        clearBtn: true,          //显示清除按钮
+        daysOfWeekDisabled: [],   //星期几不可选
+        endDate: Infinity,        //日历结束日期
+        startDate: -Infinity,        //日历结束日期
+        forceParse: true,         //是否强制转换不符合格式的字符串
+        format: 'yyyy-mm-dd',     //日期格式
+        keyboardNavigation: true, //是否显示箭头导航
+        language: 'zh-CN',           //语言
+        minViewMode: 0,
+        orientation: "auto",      //方向
+        rtl: false,
+        startView: 0,             //开始显示
+        todayHighlight: true,    //今天高亮
+        weekStart: 0              //星期几是开始
+    });
     $.ajax({
         type: "GET",
-        url: "/userMedias/myUserMediaData",
-        data: {year:2018},
+        url: "/userMedias/yearMediaData",
+        data: {year: 2018},
         dataType: "json",
-        success: function(res){
-            var data = [];
-            data[1] = { label: "已播"+res.sumPlayCount, data: Math.floor((res.sumPlayCount/res.sumCount)*100)+1 }
-            data[0] = { label: "可播"+(res.sumCount-res.sumPlayCount), data: Math.floor(((res.sumCount-res.sumPlayCount)/res.sumCount)*100)+1 }
-            data[2] = { label: "总数"+res.sumCount }
-            var pie = $.plot($(".pie"), data,{
-                series: {
-                    pie: {
-                        show: true,
-                        radius: 3/4,
-                        label: {
-                            show: true,
-                            radius: 3/4,
-                            formatter: function(label, series){
-                                return '<div style="font-size:8pt;text-align:center;padding:2px;color:white;">'+label+'<br/>'+Math.round(series.percent)+'%</div>';
-                            },
-                            background: {
-                                opacity: 0.5,
-                                color: '#000'
-                            }
-                        },
-                        innerRadius: 0.2
-                    },
-                    legend: {
-                        show: false
-                    }
-                }
-            });
+        success: function (res) {
             var d1 = [];
-            // for (var i = 0; i <= res.statisList; i += 1) d1.push([i, parseInt(Math.random() * 30)]);
-            if (res.statisList.length>0){
+            if (res.statisList.length > 0) {
                 d1.push([1, parseInt(res.statisList[0].Jans)]);
                 d1.push([2, parseInt(res.statisList[0].Febs)]);
                 d1.push([3, parseInt(res.statisList[0].Mars)]);
@@ -53,7 +44,7 @@ $(document).ready(function(){
 
             var data = new Array();
             data.push({
-                data:d1,
+                data: d1,
                 bars: {
                     show: true,
                     barWidth: 0.4,
@@ -82,7 +73,7 @@ $(document).ready(function(){
 
             $.ajax({
                 type: "GET",
-                url: '/userMedias/myUserMedias',
+                url: '/userMedias/userMediaStatistics',
                 cache: false,  //禁用缓存
                 data: param,    //传入已封装的参数
                 dataType: "json",
@@ -106,65 +97,62 @@ $(document).ready(function(){
 
             // {"data": "id"},
             {"data": "username"},
-            {"data": "mediaName"},
-            {"data": "playtime"}
-        ],
-        columnDefs: [
-            {"orderable": false, "targets": 0},
-            {"orderable": false, "targets": 1},
-            {"orderable": false, "targets": 2}
-        ],
-
-    });
-
-    table1 = $('#datatable1').DataTable({
-        "dom": '<"top"i>rt<"bottom"flp><"clear">',
-        "searching": false,
-        "bJQueryUI": true,
-        "sPaginationType": "full_numbers",
-        "serverSide": true,//开启服务器模式，使用服务器端处理配置datatable
-        "processing": true,//开启读取服务器数据时显示正在加载中……特别是大数据量的时候，开启此功能比较好
-        //"ajax": '${ss}/user/userList.do',
-        ajax: function (data, callback, settings) {
-            //封装请求参数
-            var param = getQueryCondition1(data);
-
-            $.ajax({
-                type: "GET",
-                url: '/userMedias/myMediasPlayInfo',
-                cache: false,  //禁用缓存
-                data: param,    //传入已封装的参数
-                dataType: "json",
-                success: function (result) {
-                    //封装返回数据  如果参数相同，可以直接返回result ，此处作为学习，先这么写了。
-                    var returnData = {};
-                    returnData.draw = result.draw;//这里直接自行返回了draw计数器,应该由后台返回
-                    returnData.recordsTotal = result.recordsTotal;//总记录数
-                    returnData.recordsFiltered = result.recordsFiltered;//后台不实现过滤功能，每次查询均视作全部结果
-                    returnData.data = result.data;
-                    //调用DataTables提供的callback方法，代表数据已封装完成并传回DataTables进行渲染
-                    //此时的数据需确保正确无误，异常判断应在执行此回调前自行处理完毕
-                    callback(returnData);
-                },
-                error: function (XMLHttpRequest, textStatus, errorThrown) {
-                    alert("查询失败");
-                }
-            });
-        },
-        "columns": [
-
-            // {"data": "id"},
-            {"data": "mediaName"},
+            {"data": "realyname"},
             {"data": "usedPlayCount"},
+            {"data": "vaildPlayCount"},
+            {"data": "sumcount"},
+            {"data": "playprogress"}
         ],
         columnDefs: [
-            {"orderable": false, "targets": 0},
-            {"orderable": false, "targets": 1}
+            {"orderable": false, "targets": 1},
+            {
+                "orderable": false,
+                "render": function (data, type, row) {
+                    if (data > 0) {
+                        return "<a href='/userMediaInfo?id="+row.id+"&username="+row.username+"'><span class='label label-important'>" + data + "</span></a>";
+                    } else {
+                        return "<span class='badge'>" + data + "</span>";
+                    }
+                },
+                "targets": 2
+            },{
+                "orderable": false,
+                "render": function (data, type, row) {
+                    if (data > 0) {
+
+                        return "<span class='badge badge-success'>" + data + "</span>";
+                    } else {
+                        return "<span class='badge'>" + data + "</span>";
+                    }
+                },
+                "targets": 3
+            }, {
+                "orderable": false,
+                "render": function (data, type, row) {
+                    if (row.sumcount>0){
+
+                        var vp = (row.vaildPlayCount / row.sumcount) * 100;
+                        if (vp < 30) {
+                            return "<div class='progress progress-striped progress-danger active'><div class='bar' style='width: " + vp + "%;'></div></div>";
+                        }
+                        if (vp >= 30 && vp < 50) {
+                            return "<div class='progress progress-striped progress-warning active'><div class='bar' style='width: " + vp + "%;'></div></div>";
+                        }
+                        if (vp >= 60) {
+                            return "<div class='progress progress-striped progress-success active'><div class='bar' style='width: " + vp + "%;'></div></div>";
+                        }
+                    }else {
+                        return data;
+                    }
+
+                },
+                "targets": 5
+            },
         ],
 
     });
 
-	
+
 });
 function search() {
     table.ajax.reload();

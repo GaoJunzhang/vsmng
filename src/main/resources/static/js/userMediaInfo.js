@@ -1,10 +1,13 @@
+/**
+ * Created by user on 2018/5/22.
+ */
 var table;
 var table1;
 $(document).ready(function(){
     $.ajax({
         type: "GET",
         url: "/userMedias/myUserMediaData",
-        data: {year:2018},
+        data: {year:2018,uid:$("#userId").val()},
         dataType: "json",
         success: function(res){
             var data = [];
@@ -164,7 +167,7 @@ $(document).ready(function(){
 
     });
 
-	
+
 });
 function search() {
     table.ajax.reload();
@@ -174,6 +177,7 @@ function search() {
 function getQueryCondition(data) {
     var param = {};
     //组装排序参数
+    param.uid = $("#userId").val();
     param.username = $("#name-search").val();//查询条件
     param.startTime = $("#startTime-search").val();//查询条件
     param.endTime = $("#endTime-search").val();//查询条件
@@ -186,6 +190,7 @@ function getQueryCondition(data) {
 function getQueryCondition1(data) {
     var param = {};
     //组装排序参数
+    param.uid = $("#userId").val();
     param.username = $("#name-search").val();//查询条件
     param.startTime = $("#startTime-search").val();//查询条件
     param.endTime = $("#endTime-search").val();//查询条件

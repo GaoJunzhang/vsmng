@@ -29,6 +29,10 @@
         <if test="endTime!=null and endTime!=''">
             and t.playtime&lt;= #{endTime}
         </if>
+        <if test="uid !=null and uid != ''">
+            and t.uid=#{uid}
+        </if>
+        order by t.playtime desc
     </select>
     <select id="sumPlayCount" resultType="int">
         select count(id) from user_media
@@ -36,21 +40,55 @@
     </select>
     <select id="statisticsByYear" parameterType="java.lang.String" resultType="com.study.bean.MonthBean">
         SELECT YEAR(playtime) annual,
-SUM(CASE WHEN MONTH(playtime) =1 THEN 1 ELSE 0 END) Jans,
-SUM(CASE WHEN MONTH(playtime) =2 THEN 1 ELSE 0 END) Febs,
-SUM(CASE WHEN MONTH(playtime) =3 THEN 1 ELSE 0 END) Mars,
-SUM(CASE WHEN MONTH(playtime) =4 THEN 1 ELSE 0 END) Aprs,
-SUM(CASE WHEN MONTH(playtime) =5 THEN 1 ELSE 0 END) Mays,
-SUM(CASE WHEN MONTH(playtime) =6 THEN 1 ELSE 0 END) Juns,
-SUM(CASE WHEN MONTH(playtime) =7 THEN 1 ELSE 0 END) Juls,
-SUM(CASE WHEN MONTH(playtime) =8 THEN 1 ELSE 0 END) Augs,
-SUM(CASE WHEN MONTH(playtime) =9 THEN 1 ELSE 0 END) Septs,
-SUM(CASE WHEN MONTH(playtime) =10 THEN 1 ELSE 0 END) Octs,
-SUM(CASE WHEN MONTH(playtime) =11 THEN 1 ELSE 0 END) Novs,
-SUM(CASE WHEN MONTH(playtime) =12 THEN 1 ELSE 0 END) Dects,
-COUNT(*) sumplay
-FROM user_media
-where YEAR(playtime)=#{year}
- GROUP BY     YEAR(playtime)
+            SUM(CASE WHEN MONTH(playtime) =1 THEN 1 ELSE 0 END) Jans,
+            SUM(CASE WHEN MONTH(playtime) =2 THEN 1 ELSE 0 END) Febs,
+            SUM(CASE WHEN MONTH(playtime) =3 THEN 1 ELSE 0 END) Mars,
+            SUM(CASE WHEN MONTH(playtime) =4 THEN 1 ELSE 0 END) Aprs,
+            SUM(CASE WHEN MONTH(playtime) =5 THEN 1 ELSE 0 END) Mays,
+            SUM(CASE WHEN MONTH(playtime) =6 THEN 1 ELSE 0 END) Juns,
+            SUM(CASE WHEN MONTH(playtime) =7 THEN 1 ELSE 0 END) Juls,
+            SUM(CASE WHEN MONTH(playtime) =8 THEN 1 ELSE 0 END) Augs,
+            SUM(CASE WHEN MONTH(playtime) =9 THEN 1 ELSE 0 END) Septs,
+            SUM(CASE WHEN MONTH(playtime) =10 THEN 1 ELSE 0 END) Octs,
+            SUM(CASE WHEN MONTH(playtime) =11 THEN 1 ELSE 0 END) Novs,
+            SUM(CASE WHEN MONTH(playtime) =12 THEN 1 ELSE 0 END) Dects,
+            COUNT(*) sumplay
+            FROM user_media
+            where YEAR(playtime)=#{year}
+            <if test="uid!=null and uid != ''">
+                and uid=#{uid}
+            </if>
+             GROUP BY     YEAR(playtime)
+    </select>
+    <select id="mediaPlayByUid" parameterType="int" resultType="com.study.bean.UsereMediaBean">
+        SELECT
+            name as mediaName,
+            (SELECT count(id) from user_media t1 where t1.mid=t.id
+                <if test="startTime!=null and startTime!=''">
+                    and t1.playtime&gt;=#{startTime}
+                </if>
+                <if test="endTime!=null and endTime!=''">
+                    and t1.playtime&lt;= #{endTime}
+                </if>
+            ) as usedPlayCount
+        from media t
+        where t.id in(SELECT id from user_media um where um.uid=#{uid})
+    </select>
+    <select id="userMediaStatistics" parameterType="java.lang.String" resultType="com.study.bean.UserBean">
+        SELECT u.id,u.username,u.realyname,u.sumcount,(SELECT count(id) from user_media WHERE uid=u.id) as usedPlayCount FROM user u
+        WHERE 1=1
+        <if test="username!=null and username != ''">
+            and u.username like "%"#{username}"%"
+        </if>
+        <if test="(startTime!=null and startTime!='') or (endTime!=null and endTime!='')">
+            and u.id in (SELECT uid from user_media um where 1=1
+            <if test="startTime!=null and startTime!=''">
+                and um.playtime&gt;=#{startTime}
+            </if>
+            <if test="endTime!=null and endTime!=''">
+                and um.playtime&lt;= #{endTime}
+            </if>
+            )
+        </if>
     </select>
 </mapper>

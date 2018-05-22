@@ -27,7 +27,13 @@
 <div th:include="common/menu :: menu"></div>
 
 <div id="content">
-
+    <div id="content-header">
+        <div id="breadcrumb">
+            <!--<a href="#" title="回到首页" class="tip-bottom"><i class="icon-home"></i> 首页</a>-->
+            <span class="label label-warning" ><i class="icon-user"></i></span><span class="label label-success" th:text="${uName}"></span>
+            <input type="hidden" id="userId" th:value="${uid}" />
+        </div>
+    </div>
     <div class="row-fluid">
         <div class="span6">
             <div class="widget-box">
@@ -112,52 +118,52 @@
 <script th:src="@{/js/layer.js}"></script>
 <script th:src="@{/js/jquery.flot.min.js}"></script>
 <script th:src="@{/js/jquery.flot.pie.min.js}"></script>
-<script th:src="@{/js/matrix.charts.js}"></script>
+<script th:src="@{/js/userMediaInfo.js}"></script>
 <script th:src="@{/js/bootstrap-datepicker.js}"></script>
 <script th:src="@{/js/locales/bootstrap-datepicker.zh-CN.js}"></script>
 <script type="text/javascript">
-   /* $('.selectData').datepicker({
-        format: 'yyyy-mm',
-        weekStart: 1,
-        autoclose: true,
-        startView: 2,
-        maxViewMode: 1,
-        minViewMode: 1,
-        forceParse: false,
+    /* $('.selectData').datepicker({
+     format: 'yyyy-mm',
+     weekStart: 1,
+     autoclose: true,
+     startView: 2,
+     maxViewMode: 1,
+     minViewMode: 1,
+     forceParse: false,
+     language: 'zh-CN',
+     onSelect: gotoDate
+     }).on('changeDate', gotoDate);
+     ;
+     function gotoDate() {
+     //        console.log(ev.date.getFullYear().toString() + " " + (ev.date.getMonth() + 1));
+     console.log($("#month-search").val());
+     table.ajax.reload();
+     table1.ajax.reload();
+     }*/
+    $('.selectData').datepicker({
+        autoclose: true, //自动关闭
         language: 'zh-CN',
-        onSelect: gotoDate
-    }).on('changeDate', gotoDate);
-    ;
-    function gotoDate() {
-//        console.log(ev.date.getFullYear().toString() + " " + (ev.date.getMonth() + 1));
-        console.log($("#month-search").val());
+        beforeShowDay: $.noop,    //在显示日期之前调用的函数
+        calendarWeeks: false,     //是否显示今年是第几周
+        clearBtn: true,          //显示清除按钮
+        daysOfWeekDisabled: [],   //星期几不可选
+        endDate: Infinity,        //日历结束日期
+        startDate: -Infinity,        //日历结束日期
+        forceParse: true,         //是否强制转换不符合格式的字符串
+        format: 'yyyy-mm-dd',     //日期格式
+        keyboardNavigation: true, //是否显示箭头导航
+        language: 'zh-CN',           //语言
+        minViewMode: 0,
+        orientation: "auto",      //方向
+        rtl: false,
+        startView: 0,             //开始显示
+        todayHighlight: true,    //今天高亮
+        weekStart: 0              //星期几是开始
+    });
+    function search() {
         table.ajax.reload();
         table1.ajax.reload();
-    }*/
-   $('.selectData').datepicker({
-       autoclose: true, //自动关闭
-       language: 'zh-CN',
-       beforeShowDay: $.noop,    //在显示日期之前调用的函数
-       calendarWeeks: false,     //是否显示今年是第几周
-       clearBtn: true,          //显示清除按钮
-       daysOfWeekDisabled: [],   //星期几不可选
-       endDate: Infinity,        //日历结束日期
-       startDate: -Infinity,        //日历结束日期
-       forceParse: true,         //是否强制转换不符合格式的字符串
-       format: 'yyyy-mm-dd',     //日期格式
-       keyboardNavigation: true, //是否显示箭头导航
-       language: 'zh-CN',           //语言
-       minViewMode: 0,
-       orientation: "auto",      //方向
-       rtl: false,
-       startView: 0,             //开始显示
-       todayHighlight: true,    //今天高亮
-       weekStart: 0              //星期几是开始
-   });
-   function search() {
-       table.ajax.reload();
-       table1.ajax.reload();
-   }
+    }
 </script>
 
 </body>

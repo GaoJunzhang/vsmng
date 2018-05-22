@@ -3,6 +3,7 @@ package com.study.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.study.bean.MonthBean;
+import com.study.bean.UserBean;
 import com.study.bean.UsereMediaBean;
 import com.study.mapper.UserMediaMapper;
 import com.study.model.UserMedia;
@@ -26,11 +27,11 @@ public class UserMediaServiceImpl extends BaseService<UserMedia> implements User
         return userMediaMapper.listByUid(uid);
     }
 
-    public PageInfo<UsereMediaBean> queryUserMediaByUname(String username, String startTime, String endTime, int start, int length) {
+    public PageInfo<UsereMediaBean> queryUserMediaByUname(String username, String startTime, String endTime, int start, int length,Integer uid) {
 
         int page = start / length + 1;
         PageHelper.startPage(page, length);
-        List<UsereMediaBean> usereMediaBeanList = userMediaMapper.queryUserMediaByUname(username, startTime, endTime);
+        List<UsereMediaBean> usereMediaBeanList = userMediaMapper.queryUserMediaByUname(username, startTime, endTime,uid);
         return new PageInfo<>(usereMediaBeanList);
     }
 
@@ -38,7 +39,21 @@ public class UserMediaServiceImpl extends BaseService<UserMedia> implements User
         return userMediaMapper.sumPalyCount(uid);
     }
 
-    public List<MonthBean> statisticsByYear(String year) {
-        return userMediaMapper.statisticsByYear(year);
+    public List<MonthBean> statisticsByYear(Integer year,Integer uid) {
+        return userMediaMapper.statisticsByYear(year,uid);
+    }
+
+    public PageInfo<UsereMediaBean> mediaPlayByUid(Integer uid, String startTime, String endTime, int start, int length) {
+        int page = start / length + 1;
+        PageHelper.startPage(page, length);
+        List<UsereMediaBean> usereMediaBeanList = userMediaMapper.mediaPlayByUid(uid,startTime,endTime);
+        return new PageInfo<>(usereMediaBeanList);
+    }
+
+    public PageInfo<UserBean> userMediaStatistics(String username,String startTime, String endTime, int start, int length){
+        int page = start/length +1;
+        PageHelper.startPage(page,length);
+        List<UserBean> userBeanList = userMediaMapper.userMediaStatistics(username,startTime,endTime);
+        return new PageInfo<>(userBeanList);
     }
 }
