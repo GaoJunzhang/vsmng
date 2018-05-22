@@ -38,6 +38,9 @@ public class MediaServiceImpl extends BaseService<Media> implements MediaService
         return mediaMapper.insertMedia(media);
     }
 
+    public int totalMedia(){
+        return mediaMapper.totalMedia();
+    }
  /*   public int updateMedia(Integer playcount,Integer id){
         return mediaMapper.updateMedia(playcount,id);
     }

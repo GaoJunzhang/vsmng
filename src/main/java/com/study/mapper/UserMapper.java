@@ -9,4 +9,6 @@ import java.util.List;
 public interface UserMapper extends MyMapper<User> {
     public void batchUpdateCount(@Param("list") List<User> list);
 
+    int totalUser();
+
 }

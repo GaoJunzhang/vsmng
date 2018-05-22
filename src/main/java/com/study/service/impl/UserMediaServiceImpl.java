@@ -27,11 +27,11 @@ public class UserMediaServiceImpl extends BaseService<UserMedia> implements User
         return userMediaMapper.listByUid(uid);
     }
 
-    public PageInfo<UsereMediaBean> queryUserMediaByUname(String username, String startTime, String endTime, int start, int length,Integer uid) {
+    public PageInfo<UsereMediaBean> queryUserMediaByUname(String username, String startTime, String endTime, int start, int length, Integer uid) {
 
         int page = start / length + 1;
         PageHelper.startPage(page, length);
-        List<UsereMediaBean> usereMediaBeanList = userMediaMapper.queryUserMediaByUname(username, startTime, endTime,uid);
+        List<UsereMediaBean> usereMediaBeanList = userMediaMapper.queryUserMediaByUname(username, startTime, endTime, uid);
         return new PageInfo<>(usereMediaBeanList);
     }
 
@@ -39,21 +39,31 @@ public class UserMediaServiceImpl extends BaseService<UserMedia> implements User
         return userMediaMapper.sumPalyCount(uid);
     }
 
-    public List<MonthBean> statisticsByYear(Integer year,Integer uid) {
-        return userMediaMapper.statisticsByYear(year,uid);
+    public List<MonthBean> statisticsByYear(Integer year, Integer uid) {
+        return userMediaMapper.statisticsByYear(year, uid);
     }
 
     public PageInfo<UsereMediaBean> mediaPlayByUid(Integer uid, String startTime, String endTime, int start, int length) {
         int page = start / length + 1;
         PageHelper.startPage(page, length);
-        List<UsereMediaBean> usereMediaBeanList = userMediaMapper.mediaPlayByUid(uid,startTime,endTime);
+        List<UsereMediaBean> usereMediaBeanList = userMediaMapper.mediaPlayByUid(uid, startTime, endTime);
         return new PageInfo<>(usereMediaBeanList);
     }
 
-    public PageInfo<UserBean> userMediaStatistics(String username,String startTime, String endTime, int start, int length){
-        int page = start/length +1;
-        PageHelper.startPage(page,length);
-        List<UserBean> userBeanList = userMediaMapper.userMediaStatistics(username,startTime,endTime);
+    public PageInfo<UserBean> userMediaStatistics(String username, String startTime, String endTime, int start, int length) {
+        int page = start / length + 1;
+        PageHelper.startPage(page, length);
+        List<UserBean> userBeanList = userMediaMapper.userMediaStatistics(username, startTime, endTime);
         return new PageInfo<>(userBeanList);
     }
+
+    public int thisMonthPlayCount() {
+        return userMediaMapper.thisMonthPlayCount();
+    }
+
+    public int totalPlayCount() {
+        return userMediaMapper.totalPlayCount();
+    }
+
+
 }

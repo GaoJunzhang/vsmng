@@ -19,4 +19,7 @@
             update user <set>sumcount=#{item.sumcount,jdbcType=INTEGER}</set> where id=#{item.id,jdbcType=INTEGER}
         </foreach>
     </update>
+    <select id="totalUser" resultType="java.lang.Integer">
+        select count(id) from user;
+    </select>
 </mapper>

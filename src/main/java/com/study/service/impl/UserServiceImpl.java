@@ -38,7 +38,7 @@ import java.util.List;
  * Created by yangqj on 2017/4/21.
  */
 @Service("userService")
-public class UserServiceImpl extends BaseService<User> implements UserService{
+public class UserServiceImpl extends BaseService<User> implements UserService {
     @Resource
     private UserRoleMapper userRoleMapper;
 
@@ -50,7 +50,7 @@ public class UserServiceImpl extends BaseService<User> implements UserService{
 
     @Override
     public PageInfo<User> selectByPage(User user, int start, int length) {
-        int page = start/length+1;
+        int page = start / length + 1;
         Example example = new Example(User.class);
         Example.Criteria criteria = example.createCriteria();
         if (StringUtil.isNotEmpty(user.getUsername())) {
@@ -72,23 +72,23 @@ public class UserServiceImpl extends BaseService<User> implements UserService{
     public User selectByUsername(String username) {
         Example example = new Example(User.class);
         Example.Criteria criteria = example.createCriteria();
-        criteria.andEqualTo("username",username);
+        criteria.andEqualTo("username", username);
         List<User> userList = selectByExample(example);
-        if(userList.size()>0){
+        if (userList.size() > 0) {
             return userList.get(0);
         }
-            return null;
+        return null;
     }
 
     @Override
-    @Transactional(propagation= Propagation.REQUIRED,readOnly=false,rollbackFor={Exception.class})
+    @Transactional(propagation = Propagation.REQUIRED, readOnly = false, rollbackFor = {Exception.class})
     public void delUser(Integer userid) {
         //删除用户表
         mapper.deleteByPrimaryKey(userid);
         //删除用户角色表
         Example example = new Example(UserRole.class);
         Example.Criteria criteria = example.createCriteria();
-        criteria.andEqualTo("userid",userid);
+        criteria.andEqualTo("userid", userid);
         userRoleMapper.deleteByExample(example);
     }
 
@@ -177,12 +177,7 @@ public class UserServiceImpl extends BaseService<User> implements UserService{
             String username = "";
             String password = "";
             String realname = "";
-            String level = "";
-            String equipmentno = "";
-            String category = "";
-            String mac = "";
-            String mobile = "";
-            String organization = "";
+            String sumcount = "";
 
             //循环Excel的列
             for (int c = 0; c < totalCells; c++) {
@@ -203,35 +198,10 @@ public class UserServiceImpl extends BaseService<User> implements UserService{
                         } else if (password.length() > 100) {
                             rowMessage += "密码的字数不能超过100；";
                         }
-                    }else if(c == 2){
+                    } else if (c == 2) {
                         realname = cell.getStringCellValue();
-                    }else if (c == 3){
-                        organization = cell.getStringCellValue();
-                    }else if(c == 4){
-                        level = cell.getStringCellValue();
-                        if ("学生".equals(level.trim())){
-                            level = "0";
-                        }
-                        if ("老师".equals(level.trim())){
-                            level = "1";
-                        }
-                        if ("普通用户".equals(level.trim())){
-                            level = "2";
-                        }
-                    }else if (c == 5){
-                        equipmentno = cell.getStringCellValue();
-                    }else if(c == 6){
-                        category = cell.getStringCellValue();
-                        if ("vive".equals(category.trim())){
-                            category = "1";
-                        }
-                        if ("一体机".equals(category.trim())){
-                            category = "2";
-                        }
-                    }else if(c == 7){
-                        mac = cell.getStringCellValue();
-                    }else if(c == 8){
-                        mobile = cell.getStringCellValue();
+                    } else if (c == 3) {
+                        sumcount = cell.getStringCellValue();
                         User user = new User();
                         user.setUsername(username);
                         user.setPassword(password);
@@ -266,7 +236,16 @@ public class UserServiceImpl extends BaseService<User> implements UserService{
     }
 
 
-    public void batchUpdateCount(List<User> users){
+    public void batchUpdateCount(List<User> users) {
         userMapper.batchUpdateCount(users);
+    }
+
+    public int totalUser() {
+        return userMapper.totalUser();
+    }
+
+    public List<User> findAll(){
+        Example example = new Example(User.class);
+        return selectByExample(example);
     }
 }

@@ -15,6 +15,7 @@ public interface MediaService extends IService<Media> {
    /* public int sumPalyCount(Integer uid);
 
     public int updateMedia(Integer playcount, Integer id);*/
+   public int totalMedia();
 
 
 }

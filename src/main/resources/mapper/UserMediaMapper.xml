@@ -34,9 +34,11 @@
         </if>
         order by t.playtime desc
     </select>
-    <select id="sumPlayCount" resultType="int">
+    <select id="sumPlayCount" parameterType="java.lang.Integer" resultType="int">
+        select count(id) from user_media where  uid=#{uid}
+    </select>
+    <select id="totalPlayCount" parameterType="java.lang.Integer" resultType="int">
         select count(id) from user_media
-        where uid=#{uid}
     </select>
     <select id="statisticsByYear" parameterType="java.lang.String" resultType="com.study.bean.MonthBean">
         SELECT YEAR(playtime) annual,
@@ -90,5 +92,8 @@
             </if>
             )
         </if>
+    </select>
+    <select id="thisMonthPlayCount" resultType="java.lang.Integer">
+        SELECT count(id) FROM user_media WHERE DATE_FORMAT( playtime, '%Y%m' ) = DATE_FORMAT( CURDATE( ) , '%Y%m' )
     </select>
 </mapper>

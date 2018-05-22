@@ -12,4 +12,5 @@ public interface MediaMapper extends MyMapper<Media> {
 //    public Integer updateMedia(@Param("playcount") Integer playcount,@Param("id") Integer id);
 
 //    int sumPalyCount(Integer uid);//用户总的播放次数
+    int totalMedia();
 }

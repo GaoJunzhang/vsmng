@@ -1,6 +1,9 @@
 package com.study.controller;
 
 import com.study.model.User;
+import com.study.service.MediaService;
+import com.study.service.UserMediaService;
+import com.study.service.UserService;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.LockedAccountException;
@@ -12,6 +15,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
 /**
@@ -19,23 +23,33 @@ import javax.servlet.http.HttpServletRequest;
  */
 @Controller
 public class HomeController {
-    @RequestMapping(value="/login",method= RequestMethod.GET)
-    public String login(){
+
+    @Resource
+    private UserMediaService userMediaService;
+
+    @Resource
+    private UserService userService;
+
+    @Resource
+    private MediaService mediaService;
+
+    @RequestMapping(value = "/login", method = RequestMethod.GET)
+    public String login() {
         return "login";
     }
 
-    @RequestMapping(value="/login",method=RequestMethod.POST)
-    public String login(HttpServletRequest request, User user, Model model){
+    @RequestMapping(value = "/login", method = RequestMethod.POST)
+    public String login(HttpServletRequest request, User user, Model model) {
         if (StringUtils.isEmpty(user.getUsername()) || StringUtils.isEmpty(user.getPassword())) {
             request.setAttribute("msg", "用户名或密码不能为空！");
             return "login";
         }
         Subject subject = SecurityUtils.getSubject();
-        UsernamePasswordToken token=new UsernamePasswordToken(user.getUsername(),user.getPassword());
+        UsernamePasswordToken token = new UsernamePasswordToken(user.getUsername(), user.getPassword());
         try {
             subject.login(token);
             return "redirect:statisticsPage";
-        }catch (LockedAccountException lae) {
+        } catch (LockedAccountException lae) {
             token.clear();
             request.setAttribute("msg", "用户已经被锁定不能登录，请与管理员联系！");
             return "login";
@@ -45,58 +59,66 @@ public class HomeController {
             return "login";
         }
     }
-    @RequestMapping(value={"/usersPage"})
-    public String usersPage(){
+
+    @RequestMapping(value = {"/usersPage"})
+    public String usersPage() {
         return "user/users";
     }
 
     @RequestMapping("/rolesPage")
-    public String rolesPage(){
+    public String rolesPage() {
         return "role/roles";
     }
 
     @RequestMapping("/resourcesPage")
-    public String resourcesPage(){
+    public String resourcesPage() {
         return "resources/resources";
     }
 
     @RequestMapping("/500")
-    public String fornot(){
+    public String fornot() {
         return "500";
     }
+
     @RequestMapping("/403")
-    public String forbidden(){
+    public String forbidden() {
         return "403";
     }
 
     @RequestMapping("/mediaPage")
-    public String viewMedias(){
+    public String viewMedias() {
         return "media/medias";
     }
 
     @RequestMapping("/myMediaPage")
-    public String viewuserMedias(){
-        return "myMedia/myMedias";
+    public String viewuserMedias() {
+        return "myMedia/mymedias";
     }
 
     @RequestMapping("/viewMymedia")
-    public String viewMymedia(){
+    public String viewMymedia() {
         return "userMedia/userMedias";
     }
 
     @RequestMapping("/userMediaPage")
-    public String viewMediaStatistics(){
+    public String viewMediaStatistics() {
         return "userMedia/userMedias";
     }
-    @RequestMapping(value = {"/statisticsPage",""})
-    public String statisticsPage(){
+
+    @RequestMapping(value = {"/statisticsPage", ""})
+    public String statisticsPage(Model model) {
+
+        model.addAttribute("sumMonthPlay",userMediaService.thisMonthPlayCount());
+        model.addAttribute("totalPlay",userMediaService.totalPlayCount());
+        model.addAttribute("totalUsers",userService.totalUser());
+        model.addAttribute("totalMedias",mediaService.totalMedia());
         return "mediaStatitics/mediaStatistics";
     }
 
     @RequestMapping("/userMediaInfo")
-    public String userMediaInfo(User user,Model model){
-        model.addAttribute("uid",user.getId());
-        model.addAttribute("uName",user.getUsername().toString());
+    public String userMediaInfo(User user, Model model) {
+        model.addAttribute("uid", user.getId());
+        model.addAttribute("uName", user.getUsername().toString());
         return "userMediaInfo/userMediaInfo";
     }
 

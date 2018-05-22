@@ -20,6 +20,9 @@
     insert into media(name,uid,createtime)
     values(#{name},#{uid},#{createtime})
 </insert>
+  <select id="totalMedia" resultType="java.lang.Integer">
+    select count(id) from media;
+  </select>
 <!--  &lt;update id="updateMedia" parameterType="com.study.model.Media"&gt;
         update media set playcount=#{playcount} where id=#{id}
 &lt;/update&gt;-->

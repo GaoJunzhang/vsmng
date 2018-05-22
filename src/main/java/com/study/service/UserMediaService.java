@@ -13,7 +13,7 @@ public interface UserMediaService extends IService<UserMedia> {
 
     public List<UserMedia> listByUid(Integer uid);
 
-    public PageInfo<UsereMediaBean> queryUserMediaByUname(String username, String startTime, String endTime, int start, int length,Integer uid);
+    public PageInfo<UsereMediaBean> queryUserMediaByUname(String username, String startTime, String endTime, int start, int length, Integer uid);
 
     public int sumPlayCount(Integer uid);
 
@@ -21,5 +21,9 @@ public interface UserMediaService extends IService<UserMedia> {
 
     public PageInfo<UsereMediaBean> mediaPlayByUid(Integer uid, String startTime, String endTime, int start, int length);
 
-    public PageInfo<UserBean> userMediaStatistics(String username,String startTime, String endTime, int start, int length);
+    public PageInfo<UserBean> userMediaStatistics(String username, String startTime, String endTime, int start, int length);
+
+    public int thisMonthPlayCount();
+
+    public int totalPlayCount();
 }
