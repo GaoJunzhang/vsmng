@@ -34,7 +34,7 @@ public class ApiWebController {
     @RequestMapping(value = "/postUserMedia")
     public Object postUserMedia(@Param("mediaName") String mediaName, HttpServletRequest request) {
         JsonResult jsonResult;
-        String username = request.getAttribute("username")+"";
+        String username = request.getAttribute("username") + "";
 /*        try {
             User user = userService.selectByUsername(username);
             if (user.getSumcount() <= 0) {
@@ -65,23 +65,23 @@ public class ApiWebController {
             return jsonResult;
         }
         jsonResult = new JsonResult(ResultCode.SUCCESS, "成功", true);*/
-        Map<String,Object> map = map = new HashMap<String,Object>();;
+        Map<String, Object> map = map = new HashMap<String, Object>();
         try {
             User user = userService.selectByUsername(username);
-            map.put("userTotalPlay",user.getSumcount());
+            map.put("userTotalPlay", user.getSumcount());
             if (user.getSumcount() <= 0) {
                 jsonResult = new JsonResult(ResultCode.SYS_ERROR, "该账号未授权播放", map);
                 return jsonResult;
             }
-            int spalycount =userMediaService.sumPalyCount(user.getId());
-            map.put("usedPlay",spalycount);
-            if (user.getSumcount()<= spalycount){
-                map.put("validPlay",0);
+            int spalycount = userMediaService.sumPalyCount(user.getId());
+            if (user.getSumcount() <= spalycount) {
+                map.put("validPlay", 0);
+                map.put("usedPlay", spalycount);
                 jsonResult = new JsonResult(ResultCode.SYS_ERROR, "该账号可播放次数为0", map);
                 return jsonResult;
             }
             Media media = mediaService.findByName(mediaName);
-            if (media == null){
+            if (media == null) {
                 media = new Media();
                 media.setName(mediaName);
                 media.setCreatetime(new Timestamp(System.currentTimeMillis()));
@@ -93,7 +93,9 @@ public class ApiWebController {
             userMedia.setMid(media.getId());
             userMedia.setPlaytime(new Timestamp(System.currentTimeMillis()));
             userMediaService.save(userMedia);
-            map.put("validPlay",user.getSumcount()-spalycount);
+            spalycount += 1;
+            map.put("usedPlay",spalycount);
+            map.put("validPlay", user.getSumcount() - spalycount);
         } catch (Exception e) {
             e.printStackTrace();
             jsonResult = new JsonResult(ResultCode.UNKNOWN_ERROR, "系统异常", true);
@@ -103,5 +105,23 @@ public class ApiWebController {
         return jsonResult;
     }
 
+    @RequestMapping(value = "getMediaPlayInfo")
+    public Object getMediaPlayInfo(HttpServletRequest request) {
+        JsonResult jsonResult;
+        String username = request.getAttribute("username") + "";
+
+        User user = userService.selectByUsername(username);
+        Map<String, Object> map = map = new HashMap<String, Object>();
+        map.put("userTotalPlay", user.getSumcount());
+        if (user.getSumcount() <= 0) {
+            jsonResult = new JsonResult(ResultCode.SYS_ERROR, "该账号未授权播放", map);
+            return jsonResult;
+        }
+        int spalycount = userMediaService.sumPalyCount(user.getId());
+        map.put("usedPlay", spalycount);
+        map.put("validPlay", user.getSumcount() - spalycount);
+        jsonResult = new JsonResult(ResultCode.SUCCESS, "成功", map);
+        return jsonResult;
+    }
 
 }
