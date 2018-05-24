@@ -6,6 +6,8 @@ import com.study.mapper.MediaMapper;
 import com.study.model.Media;
 import com.study.service.MediaService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.entity.Example;
 import tk.mybatis.mapper.util.StringUtil;
 
@@ -34,6 +36,8 @@ public class MediaServiceImpl extends BaseService<Media> implements MediaService
         return mediaMapper.findMediaByName(name);
     }
 
+    @Override
+    @Transactional(propagation= Propagation.REQUIRED,readOnly=false,rollbackFor={Exception.class})
     public int insertMedia(Media media){
         return mediaMapper.insertMedia(media);
     }

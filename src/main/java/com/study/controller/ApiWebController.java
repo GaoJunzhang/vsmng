@@ -35,36 +35,6 @@ public class ApiWebController {
     public Object postUserMedia(@Param("mediaName") String mediaName, HttpServletRequest request) {
         JsonResult jsonResult;
         String username = request.getAttribute("username") + "";
-/*        try {
-            User user = userService.selectByUsername(username);
-            if (user.getSumcount() <= 0) {
-                jsonResult = new JsonResult(ResultCode.SYS_ERROR, "该账号未授权播放", true);
-                return jsonResult;
-            }
-            int spalycount =userMediaService.sumPalyCount(user.getId());
-            if (user.getSumcount()<= spalycount){
-                jsonResult = new JsonResult(ResultCode.SYS_ERROR, "该账号可播放次数为0", true);
-                return jsonResult;
-            }
-            Media media = mediaService.findByName(mediaName);
-            if (media == null){
-                media = new Media();
-                media.setName(mediaName);
-                media.setCreatetime(new Timestamp(System.currentTimeMillis()));
-                media.setUid(user.getId());
-                mediaService.insertMedia(media);
-            }
-            UserMedia userMedia = new UserMedia();
-            userMedia.setUid(user.getId());
-            userMedia.setMid(media.getId());
-            userMedia.setPlaytime(new Timestamp(System.currentTimeMillis()));
-            userMediaService.save(userMedia);
-        } catch (Exception e) {
-            e.printStackTrace();
-            jsonResult = new JsonResult(ResultCode.UNKNOWN_ERROR, "失败", true);
-            return jsonResult;
-        }
-        jsonResult = new JsonResult(ResultCode.SUCCESS, "成功", true);*/
         Map<String, Object> map = map = new HashMap<String, Object>();
         try {
             User user = userService.selectByUsername(username);
@@ -98,14 +68,14 @@ public class ApiWebController {
             map.put("validPlay", user.getSumcount() - spalycount);
         } catch (Exception e) {
             e.printStackTrace();
-            jsonResult = new JsonResult(ResultCode.UNKNOWN_ERROR, "系统异常", true);
+            jsonResult = new JsonResult(ResultCode.UNKNOWN_ERROR, "系统异常", e);
             return jsonResult;
         }
         jsonResult = new JsonResult(ResultCode.SUCCESS, "成功", map);
         return jsonResult;
     }
 
-    @RequestMapping(value = "getMediaPlayInfo")
+    @RequestMapping(value = "/getMediaPlayInfo")
     public Object getMediaPlayInfo(HttpServletRequest request) {
         JsonResult jsonResult;
         String username = request.getAttribute("username") + "";
