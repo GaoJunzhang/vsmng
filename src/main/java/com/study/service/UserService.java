@@ -5,6 +5,7 @@ import com.study.model.User;
 import com.study.model.UserRole;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 /**
@@ -26,5 +27,7 @@ public interface UserService extends IService<User> {
     int totalUser();
 
     List<User> findAll();
+
+    public void updateLoggerByUname(Timestamp loginTime, Timestamp logoutTime, String username);
 
 }

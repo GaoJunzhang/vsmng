@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.sql.Timestamp;
+
 /**
  * Created by user on 2018/3/20.
  */
@@ -43,6 +45,13 @@ public class JsonWebToken {
                 jsonResult = new JsonResult(ResultCode.NOT_LOGIN, "密码错误", null);
                 return jsonResult;
             }
+        }
+        try {
+            userService.updateLoggerByUname(new Timestamp(System.currentTimeMillis()),null,user.getUsername());
+        } catch (Exception e) {
+            e.printStackTrace();
+            jsonResult = new JsonResult(ResultCode.SYS_ERROR, "error", null);
+            return jsonResult;
         }
         //拼装accessToken
         String accessToken = JwtHelper.createJWT(user.getUsername(), String.valueOf(userBean.getId()),

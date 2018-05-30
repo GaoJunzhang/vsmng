@@ -1,7 +1,13 @@
 package com.study.model;
 
-import javax.persistence.*;
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+import javax.persistence.Column;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import java.io.Serializable;
+import java.sql.Timestamp;
 
 public class User implements Serializable {
     private static final long serialVersionUID = 8902216402437436035L;
@@ -26,6 +32,10 @@ public class User implements Serializable {
     private String createTime;
 
     private String realyname;
+
+    private Timestamp loginTime;
+
+    private Timestamp logoutTime;
 
     /**
      * @return id
@@ -141,5 +151,23 @@ public class User implements Serializable {
      */
     public void setRealyname(String realyname) {
         this.realyname = realyname;
+    }
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    public Timestamp getLoginTime() {
+        return loginTime;
+    }
+
+    public void setLoginTime(Timestamp loginTime) {
+        this.loginTime = loginTime;
+    }
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    public Timestamp getLogoutTime() {
+        return logoutTime;
+    }
+
+    public void setLogoutTime(Timestamp logoutTime) {
+        this.logoutTime = logoutTime;
     }
 }

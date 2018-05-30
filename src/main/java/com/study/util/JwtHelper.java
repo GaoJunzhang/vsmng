@@ -9,6 +9,7 @@ import javax.crypto.spec.SecretKeySpec;
 import javax.xml.bind.DatatypeConverter;
 import java.security.Key;
 import java.util.Date;
+import java.util.TimeZone;
 
 /**
  * Created by user on 2018/3/20.
@@ -46,7 +47,10 @@ public class JwtHelper {
                 .signWith(signatureAlgorithm, signingKey);//签名算法以及秘钥
         //添加Token过期时间
         if (TTLMillis >= 0) {
-            long expMillis = nowMillis + TTLMillis;
+            long zero=nowMillis/(1000*3600*24)*(1000*3600*24)- TimeZone.getDefault().getRawOffset();//今天零点零分零秒的毫秒数
+            long twelve=zero+24*60*60*1000-1;//今天23点59分59秒的毫秒数
+            //每天23:59:59秒token过期
+            long expMillis = twelve;
             Date exp = new Date(expMillis);
             builder.setExpiration(exp).setNotBefore(now);//过期时间
         }

@@ -30,6 +30,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -247,5 +248,9 @@ public class UserServiceImpl extends BaseService<User> implements UserService {
     public List<User> findAll(){
         Example example = new Example(User.class);
         return selectByExample(example);
+    }
+
+    public void updateLoggerByUname(Timestamp loginTime, Timestamp logoutTime,String username){
+        userMapper.updateLoggerByUname(loginTime,logoutTime,username);
     }
 }

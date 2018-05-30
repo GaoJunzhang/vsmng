@@ -94,4 +94,14 @@ public class ApiWebController {
         return jsonResult;
     }
 
+    @RequestMapping(value = "/logout")
+    public Object logout(HttpServletRequest request) {
+        JsonResult jsonResult;
+        String username = request.getAttribute("username") + "";
+
+        userService.updateLoggerByUname(null,new Timestamp(System.currentTimeMillis()),username);
+        jsonResult = new JsonResult(ResultCode.SUCCESS, "注销成功", null);
+        return jsonResult;
+    }
+
 }
