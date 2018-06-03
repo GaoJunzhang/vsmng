@@ -79,7 +79,7 @@
                         </button>
                         <button shiro:hasPermission="/users/setCount" type="button" onclick="sumCount()"
                                 class="btn btn-success" style="float: right; margin-right: 1px;"><span
-                                class=" icon-refresh"></span>账号次数
+                                class=" icon-refresh"></span>次数设置
                         </button>
                     </form>
 
@@ -90,10 +90,12 @@
                                 <th>
                                     <input type="checkbox" class="checkall"/>
                                 </th>
-                                <th>ID</th>
+                                <!--<th>ID</th>-->
                                 <th>账号</th>
                                 <th>真实姓名</th>
                                 <th>权限次数</th>
+                                <th>登陆时间</th>
+                                <th>退出时间</th>
                                 <th>是否启用</th>
                             </tr>
                             </thead>
@@ -314,11 +316,13 @@
                     },
                     "bSortable": false
                 },
-                {"data": "id"},
+                // {"data": "id"},
                 {"data": "username"},
                 {"data": "realyname"},
                 {"data": "sumcount"},
-                {"data": "enable"},
+                {"data": "loginTime"},
+                {"data": "logoutTime"},
+                {"data": "enable"}
             ],
             columnDefs: [
                 {"orderable": false, "targets": 1},
@@ -332,7 +336,7 @@
                             return "关闭";
                         }
                     },
-                    "targets": 4
+                    "targets": 6
                 },
             ],
 
