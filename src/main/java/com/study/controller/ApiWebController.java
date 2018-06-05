@@ -57,10 +57,10 @@ public class ApiWebController {
                 map.put("playLimit", false);
             }
 
-            Media media = mediaService.findByName(mediaName);
+            Media media = mediaService.findByName(mediaName.trim());
             if (media == null) {
                 media = new Media();
-                media.setName(mediaName);
+                media.setName(mediaName.trim());
                 media.setCreatetime(new Timestamp(System.currentTimeMillis()));
                 media.setUid(user.getId());
                 mediaService.insertMedia(media);
