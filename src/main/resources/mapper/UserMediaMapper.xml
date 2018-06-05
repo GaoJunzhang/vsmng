@@ -82,6 +82,9 @@
         <if test="username!=null and username != ''">
             and u.username like "%"#{username}"%"
         </if>
+        <if test="realyname!=null and realyname != ''">
+            and u.realyname like "%"#{realyname}"%"
+        </if>
         <if test="(startTime!=null and startTime!='') or (endTime!=null and endTime!='')">
             and u.id in (SELECT uid from user_media um where 1=1
             <if test="startTime!=null and startTime!=''">

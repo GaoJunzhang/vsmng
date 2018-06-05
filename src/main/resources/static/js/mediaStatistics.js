@@ -70,7 +70,6 @@ $(document).ready(function () {
         ajax: function (data, callback, settings) {
             //封装请求参数
             var param = getQueryCondition(data);
-
             $.ajax({
                 type: "GET",
                 url: '/userMedias/userMediaStatistics',
@@ -162,6 +161,7 @@ function getQueryCondition(data) {
     var param = {};
     //组装排序参数
     param.username = $("#name-search").val();//查询条件
+    param.realyname = $("#realyname-search").val();
     param.startTime = $("#startTime-search").val();//查询条件
     param.endTime = $("#endTime-search").val();//查询条件
     //组装分页参数

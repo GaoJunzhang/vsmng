@@ -38,18 +38,25 @@ public class ApiWebController {
         Map<String, Object> map = map = new HashMap<String, Object>();
         try {
             User user = userService.selectByUsername(username);
-            map.put("userTotalPlay", user.getSumcount());
-            if (user.getSumcount() <= 0) {
-                jsonResult = new JsonResult(ResultCode.SYS_ERROR, "该账号未授权播放", map);
-                return jsonResult;
+            int spalycount = 0;
+            if (user.getIsLimit()==0){//是否限制次数（0是1否）
+                map.put("playLimit", true);
+                map.put("userTotalPlay", user.getSumcount());
+                if (user.getSumcount() <= 0) {
+                    jsonResult = new JsonResult(ResultCode.SYS_ERROR, "该账号未授权播放", map);
+                    return jsonResult;
+                }
+                spalycount = userMediaService.sumPalyCount(user.getId());
+                if (user.getSumcount() <= spalycount) {
+                    map.put("validPlay", 0);
+                    map.put("usedPlay", spalycount);
+                    jsonResult = new JsonResult(ResultCode.SYS_ERROR, "该账号可播放次数为0", map);
+                    return jsonResult;
+                }
+            }else {
+                map.put("playLimit", false);
             }
-            int spalycount = userMediaService.sumPalyCount(user.getId());
-            if (user.getSumcount() <= spalycount) {
-                map.put("validPlay", 0);
-                map.put("usedPlay", spalycount);
-                jsonResult = new JsonResult(ResultCode.SYS_ERROR, "该账号可播放次数为0", map);
-                return jsonResult;
-            }
+
             Media media = mediaService.findByName(mediaName);
             if (media == null) {
                 media = new Media();

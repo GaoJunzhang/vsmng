@@ -37,6 +37,9 @@ public class User implements Serializable {
 
     private Timestamp logoutTime;
 
+    @Column(name = "is_limit")
+    private Short isLimit;
+
     /**
      * @return id
      */
@@ -169,5 +172,13 @@ public class User implements Serializable {
 
     public void setLogoutTime(Timestamp logoutTime) {
         this.logoutTime = logoutTime;
+    }
+
+    public Short getIsLimit() {
+        return isLimit;
+    }
+
+    public void setIsLimit(Short isLimit) {
+        this.isLimit = isLimit;
     }
 }

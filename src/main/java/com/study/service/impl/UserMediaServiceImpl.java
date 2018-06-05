@@ -50,10 +50,10 @@ public class UserMediaServiceImpl extends BaseService<UserMedia> implements User
         return new PageInfo<>(usereMediaBeanList);
     }
 
-    public PageInfo<UserBean> userMediaStatistics(String username, String startTime, String endTime, int start, int length) {
+    public PageInfo<UserBean> userMediaStatistics(String username,String realyname, String startTime, String endTime, int start, int length) {
         int page = start / length + 1;
         PageHelper.startPage(page, length);
-        List<UserBean> userBeanList = userMediaMapper.userMediaStatistics(username, startTime, endTime);
+        List<UserBean> userBeanList = userMediaMapper.userMediaStatistics(username,realyname, startTime, endTime);
         return new PageInfo<>(userBeanList);
     }
 

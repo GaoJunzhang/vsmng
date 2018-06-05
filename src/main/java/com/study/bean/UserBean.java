@@ -37,6 +37,8 @@ public class UserBean {
 
     private Integer playprogress;
 
+    private Short isLimit;
+
     public Integer getVaildPlayCount() {
         return this.sumcount - this.usedPlayCount;
     }

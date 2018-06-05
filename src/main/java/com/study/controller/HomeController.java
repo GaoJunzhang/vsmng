@@ -1,7 +1,9 @@
 package com.study.controller;
 
+import com.study.model.Resources;
 import com.study.model.User;
 import com.study.service.MediaService;
+import com.study.service.ResourcesService;
 import com.study.service.UserMediaService;
 import com.study.service.UserService;
 import org.apache.shiro.SecurityUtils;
@@ -17,6 +19,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by yangqj on 2017/4/21.
@@ -32,6 +37,9 @@ public class HomeController {
 
     @Resource
     private MediaService mediaService;
+
+    @Resource
+    private ResourcesService resourcesService;
 
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public String login() {
@@ -107,12 +115,28 @@ public class HomeController {
 
     @RequestMapping(value = {"/statisticsPage", ""})
     public String statisticsPage(Model model) {
-
+        Integer userid = (Integer) SecurityUtils.getSubject().getSession().getAttribute("userSessionId");
+        boolean flag = true;
+        Map<String,Object> map = new HashMap<>();
+        map.put("type",1);
+        map.put("userid",userid);
+        List<Resources> resourcesList = resourcesService.loadUserResources(map);
+        for(int i=0 ;i<resourcesList.size();i++){
+            if (resourcesList.get(i).getResurl().contains("statisticsPage")){
+                flag = false;
+                break;
+            }
+        }
         model.addAttribute("sumMonthPlay",userMediaService.thisMonthPlayCount());
         model.addAttribute("totalPlay",userMediaService.totalPlayCount());
         model.addAttribute("totalUsers",userService.totalUser());
         model.addAttribute("totalMedias",mediaService.totalMedia());
-        return "mediaStatitics/mediaStatistics";
+        if (flag){
+
+            return "myMedia/mymedias";
+        }else {
+            return "mediaStatitics/mediaStatistics";
+        }
     }
 
     @RequestMapping("/userMediaInfo")

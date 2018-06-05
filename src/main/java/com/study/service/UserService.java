@@ -30,4 +30,6 @@ public interface UserService extends IService<User> {
 
     public void updateLoggerByUname(Timestamp loginTime, Timestamp logoutTime, String username);
 
+    public void updateLimit(short isLimit,int id);
+
 }

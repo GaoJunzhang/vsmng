@@ -15,6 +15,7 @@
         <result column="login_time" jdbcType="TIMESTAMP" property="loginTime"/>
         <result column="logout_time" jdbcType="TIMESTAMP" property="logoutTime"/>
         <result column="realyname" jdbcType="VARCHAR" property="realyname"/>
+        <result column="is_limit" jdbcType="SMALLINT" property="isLimit"/>
     </resultMap>
     <update id="batchUpdateCount" parameterType="java.util.List">
         <foreach collection="list" item="item" index="index" open="" close="" separator=";">
@@ -22,6 +23,9 @@
             <set>sumcount=#{item.sumcount,jdbcType=INTEGER}</set>
             where id=#{item.id,jdbcType=INTEGER}
         </foreach>
+    </update>
+    <update id="updateLimit" parameterType="com.study.model.User">
+        update user <set>is_limit=#{isLimit}</set> where id=#{id}
     </update>
     <update id="updateLoggerByUname" parameterType="com.study.model.User">
             update user

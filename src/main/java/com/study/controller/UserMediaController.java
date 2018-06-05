@@ -121,7 +121,8 @@ public class UserMediaController {
     }
 
     @RequestMapping(value = "/userMediaStatistics", method = RequestMethod.GET)
-    public Map userMediaStatistics(String draw, @RequestParam(required = false) String username, @RequestParam(required = false) String startTime,
+    public Map userMediaStatistics(String draw, @RequestParam(required = false) String username, @RequestParam(required = false) String realyname,
+                                   @RequestParam(required = false) String startTime,
                                    @RequestParam(required = false) String endTime,
                                    @RequestParam(required = false, defaultValue = "1") int start,
                                    @RequestParam(required = false, defaultValue = "10") int length) {
@@ -130,7 +131,7 @@ public class UserMediaController {
             endTime += " 23:59:59";
         }
 //        Integer uid = (Integer)SecurityUtils.getSubject().getSession().getAttribute("userSessionId");
-        PageInfo<UserBean> pageInfo = userMediaService.userMediaStatistics(username, startTime, endTime, start, length);
+        PageInfo<UserBean> pageInfo = userMediaService.userMediaStatistics(username,realyname, startTime, endTime, start, length);
         System.out.println("pageInfo.getTotal():" + pageInfo.getTotal());
         map.put("draw", draw);
         map.put("recordsTotal", pageInfo.getTotal());

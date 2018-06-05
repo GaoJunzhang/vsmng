@@ -97,6 +97,7 @@
                                 <th>登陆时间</th>
                                 <th>退出时间</th>
                                 <th>是否启用</th>
+                                <th>是否限次</th>
                             </tr>
                             </thead>
                         </table>
@@ -322,7 +323,8 @@
                 {"data": "sumcount"},
                 {"data": "loginTime"},
                 {"data": "logoutTime"},
-                {"data": "enable"}
+                {"data": "enable"},
+                {"data": "isLimit"}
             ],
             columnDefs: [
                 {"orderable": false, "targets": 1},
@@ -338,6 +340,17 @@
                     },
                     "targets": 6
                 },
+                {
+                    "orderable": false,
+                    "render": function (data, type, row) {
+                        if (data == 1) {
+                            return "<a href='#' title='修改限制' onclick='setLimt("+row.id+",0)'><span class='label label-info'>无限</span></a>";
+                        } else {
+                            return "<a href='#' title='修改限制' onclick='setLimt("+row.id+",1)'><span class='label label-important'>有限</span></a>";
+                        }
+                    },
+                    "targets": 7
+                }
             ],
 
         });
@@ -345,6 +358,20 @@
 
     });
 
+    function setLimt(id,isLimit) {
+        $.ajax({
+            async: false,
+            cache: true,
+            type: "POST",
+            data: {id: id,isLimit:isLimit},
+            url: 'users/setLimit',
+            success: function (data) {
+                if (data == "success"){
+                    table.ajax.reload();
+                }
+            }
+        });
+    }
     function search() {
         table.ajax.reload();
     }

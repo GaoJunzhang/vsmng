@@ -23,7 +23,7 @@ public interface UserMediaMapper extends MyMapper<UserMedia> {
 
     public List<UsereMediaBean> mediaPlayByUid(@Param("uid") Integer uid, @Param("startTime") String startTime, @Param("endTime") String endTime);
 
-    public List<UserBean> userMediaStatistics(@Param("username") String username, @Param("startTime") String startTime,
+    public List<UserBean> userMediaStatistics(@Param("username") String username,@Param("realyname") String realyname, @Param("startTime") String startTime,
                                               @Param("endTime") String endTime);
 
     public int thisMonthPlayCount();

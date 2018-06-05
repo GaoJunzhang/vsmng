@@ -253,4 +253,8 @@ public class UserServiceImpl extends BaseService<User> implements UserService {
     public void updateLoggerByUname(Timestamp loginTime, Timestamp logoutTime,String username){
         userMapper.updateLoggerByUname(loginTime,logoutTime,username);
     }
+
+    public void updateLimit(short isLimit,int id){
+        userMapper.updateLimit(isLimit,id);
+    }
 }

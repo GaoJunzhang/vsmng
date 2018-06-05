@@ -211,4 +211,15 @@ public class UserController {
         }
     }
 
+    @RequestMapping(value = "/setLimit",method = RequestMethod.POST)
+    public String updateLimit(@RequestParam(value = "id") int id,@RequestParam(value = "isLimit") short isLimit){
+        try {
+            userService.updateLimit(isLimit,id);
+            return "success";
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "fail";
+        }
+    }
+
 }

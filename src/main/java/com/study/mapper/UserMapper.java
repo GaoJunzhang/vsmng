@@ -14,4 +14,6 @@ public interface UserMapper extends MyMapper<User> {
 
     public void updateLoggerByUname(@Param("loginTime") Timestamp loginTime, @Param("logoutTime") Timestamp logoutTime, @Param("username") String username);
 
+    public void updateLimit(@Param("isLimit") short isLimit,@Param("id") Integer id);
+
 }
