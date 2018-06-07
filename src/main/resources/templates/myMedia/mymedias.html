@@ -34,6 +34,9 @@
                 <div class="widget-title"><span class="icon"> <i class="icon-signal"></i> </span>
                     <h5>年度播放图</h5>
                 </div>
+                <div class="alert alert-success alert-block">
+                    <h4 class="alert-heading"><i class="icon-camera-retro"></i>&nbsp;累计播放:<strong style="color:red"><span th:text="${totalPlayCount}"></span></strong>次</h4>
+                </div>
                 <div class="widget-content">
                     <div class="bars"></div>
                 </div>
@@ -45,8 +48,20 @@
                 <div class="widget-title"><span class="icon"> <i class="icon-signal"></i> </span>
                     <h5>播放统计</h5>
                 </div>
+                <div class="alert alert-success alert-block">
+                    <h4 class="alert-heading"><i class="icon-gift"></i>&nbsp;套餐类型:<strong style="color:red"><span id="playLimit"></span></strong></h4>
+                </div>
                 <div class="widget-content">
-                    <div class="pie"></div>
+                    <div class="pie" id="staticPid"></div>
+                    <div id="staticPidUnlimit" hidden="hidden">
+                        <ul class="quick-actions">
+                            <li class="bg_lg"> <a href="#"> <i class="icon-trophy large"></i> 无限套餐 </a> </li>
+
+                        </ul>
+                        <div class="alert alert-success alert-block">
+                            <h4 class="alert-heading">无限!</h4>
+                            您当前套餐为无限播放！您已经累计播放<strong style="color:red"><span th:text="${totalPlayCount}"></span></strong>次，请继续使用! </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -57,6 +72,9 @@
             <div class="widget-box">
                 <div class="widget-title"><span class="icon"><i class="icon-th"></i></span>
                     <h5>播放统计</h5>
+                </div>
+                <div class="alert alert-success">
+                    <strong><i class="icon-reorder"></i>&nbsp;统计：</strong><span id="sumPlayCount"></span></strong>次
                 </div>
                 <form class="form-inline">
                     <div class="form-group">

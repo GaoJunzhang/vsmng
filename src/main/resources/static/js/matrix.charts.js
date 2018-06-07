@@ -8,32 +8,36 @@ $(document).ready(function(){
         dataType: "json",
         success: function(res){
             var data = [];
-            data[1] = { label: "已播"+res.sumPlayCount, data: Math.floor((res.sumPlayCount/res.sumCount)*100)+1 }
-            data[0] = { label: "可播"+(res.sumCount-res.sumPlayCount), data: Math.floor(((res.sumCount-res.sumPlayCount)/res.sumCount)*100)+1 }
-            data[2] = { label: "总数"+res.sumCount }
-            var pie = $.plot($(".pie"), data,{
-                series: {
-                    pie: {
-                        show: true,
-                        radius: 3/4,
-                        label: {
+            if (res.isLimit==0){
+
+                data[1] = { label: "已播"+res.sumPlayCount, data: Math.floor((res.sumPlayCount/res.sumCount)*100)+1 }
+                data[0] = { label: "可播"+(res.sumCount-res.sumPlayCount), data: Math.floor(((res.sumCount-res.sumPlayCount)/res.sumCount)*100)+1 }
+                data[2] = { label: "总数"+res.sumCount }
+                var pie = $.plot($(".pie"), data,{
+                    series: {
+                        pie: {
                             show: true,
                             radius: 3/4,
-                            formatter: function(label, series){
-                                return '<div style="font-size:8pt;text-align:center;padding:2px;color:white;">'+label+'<br/>'+Math.round(series.percent)+'%</div>';
+                            label: {
+                                show: true,
+                                radius: 3/4,
+                                formatter: function(label, series){
+                                    return '<div style="font-size:8pt;text-align:center;padding:2px;color:white;">'+label+'<br/>'+Math.round(series.percent)+'%</div>';
+                                },
+                                background: {
+                                    opacity: 0.5,
+                                    color: '#000'
+                                }
                             },
-                            background: {
-                                opacity: 0.5,
-                                color: '#000'
-                            }
+                            innerRadius: 0.2
                         },
-                        innerRadius: 0.2
-                    },
-                    legend: {
-                        show: false
+                        legend: {
+                            show: false
+                        }
                     }
-                }
-            });
+
+                });
+            }
             var d1 = [];
             // for (var i = 0; i <= res.statisList; i += 1) d1.push([i, parseInt(Math.random() * 30)]);
             if (res.statisList.length>0){
@@ -66,6 +70,13 @@ $(document).ready(function(){
             var bar = $.plot($(".bars"), data, {
                 legend: true
             });
+            if (res.isLimit==1){
+                $("#staticPid").hide();
+                $("#staticPidUnlimit").show();
+                $("#playLimit").html("无限播放");
+            }else {
+                $("#playLimit").html(res.sumCount+"次");
+            }
         }
     });
     table = $('#datatable').DataTable({
@@ -144,6 +155,11 @@ $(document).ready(function(){
                     returnData.data = result.data;
                     //调用DataTables提供的callback方法，代表数据已封装完成并传回DataTables进行渲染
                     //此时的数据需确保正确无误，异常判断应在执行此回调前自行处理完毕
+                    var totalPlay = 0;
+                    for (var i=0;i<result.data.length;i++){
+                        totalPlay += Number(result.data[i].usedPlayCount);
+                    }
+                    $("#sumPlayCount").html(totalPlay);
                     callback(returnData);
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {

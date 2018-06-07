@@ -65,7 +65,7 @@
     <select id="mediaPlayByUid" parameterType="int" resultType="com.study.bean.UsereMediaBean">
         SELECT
             name as mediaName,
-            (SELECT count(id) from user_media t1 where t1.mid=t.id
+            (SELECT count(id) from user_media t1 where t1.mid=t.id and t1.uid=#{uid}
                 <if test="startTime!=null and startTime!=''">
                     and t1.playtime&gt;=#{startTime}
                 </if>
@@ -74,7 +74,7 @@
                 </if>
             ) as usedPlayCount
         from media t
-        where t.id in(SELECT id from user_media um where um.uid=#{uid})
+        where t.id in(SELECT um.mid from user_media um where um.uid=#{uid})
     </select>
     <select id="userMediaStatistics" parameterType="java.lang.String" resultType="com.study.bean.UserBean">
         SELECT u.id,u.username,u.realyname,u.sumcount,(SELECT count(id) from user_media WHERE uid=u.id) as usedPlayCount FROM user u
@@ -98,5 +98,8 @@
     </select>
     <select id="thisMonthPlayCount" resultType="java.lang.Integer">
         SELECT count(id) FROM user_media WHERE DATE_FORMAT( playtime, '%Y%m' ) = DATE_FORMAT( CURDATE( ) , '%Y%m' )
+    </select>
+    <select id="totalSunPlayCount" parameterType="int" resultType="int">
+        select count(id) from user_media where uid=#{uid}
     </select>
 </mapper>

@@ -6,6 +6,7 @@ import com.study.bean.UserBean;
 import com.study.bean.UsereMediaBean;
 import com.study.model.User;
 import com.study.service.UserMediaService;
+import com.study.service.UserService;
 import com.study.util.VTools;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.util.StringUtils;
@@ -24,6 +25,9 @@ import java.util.Map;
 public class UserMediaController {
     @Resource
     private UserMediaService userMediaService;
+
+    @Resource
+    private UserService userService;
 
     @RequestMapping
     public Map<String, Object> getAll(UsereMediaBean usereMediaBean, String draw,
@@ -45,21 +49,33 @@ public class UserMediaController {
     }
 
     @RequestMapping(value = "/myUserMediaData", method = RequestMethod.GET)
-    public Map myUserMediaData(@RequestParam(required = false) String year ,@RequestParam(required = false) Integer uid) {
-        User user = (User) SecurityUtils.getSubject().getSession().getAttribute("userSession");
-        if (StringUtils.isEmpty(uid)){
-
-            uid = user.getId();
+    public Map myUserMediaData(@RequestParam(required = false) String year ,@RequestParam(required = false) Integer uid,@RequestParam(required = false) String username) {
+        User u = (User) SecurityUtils.getSubject().getSession().getAttribute("userSession");
+        if (StringUtils.isEmpty(username)){
+            username = u.getUsername();
         }
-        int sumPlayCount = userMediaService.sumPlayCount(uid);
+        User user = userService.selectByUsername(username);
+        Map map = new HashMap();
         if (StringUtils.isEmpty(year)) {
             year = VTools.getSysYear();
         }
         List<MonthBean> list = userMediaService.statisticsByYear(Integer.parseInt(year), uid);
-        Map map = new HashMap();
-        map.put("sumCount", user.getSumcount());
-        map.put("sumPlayCount", sumPlayCount);
-        map.put("statisList", list);
+        if (user.getIsLimit()==1){
+            map.put("sumCount", 100);
+            map.put("sumPlayCount", 0);
+            map.put("statisList", list);
+        }else {
+
+            if (StringUtils.isEmpty(uid)){
+
+                uid = user.getId();
+            }
+            int sumPlayCount = userMediaService.sumPlayCount(uid);
+            map.put("sumCount", user.getSumcount());
+            map.put("sumPlayCount", sumPlayCount);
+            map.put("statisList", list);
+        }
+        map.put("isLimit",user.getIsLimit());
         return map;
     }
 
@@ -86,7 +102,10 @@ public class UserMediaController {
         if (!StringUtils.isEmpty(endTime)) {
             endTime += " 23:59:59";
         }
-        User user = (User) SecurityUtils.getSubject().getSession().getAttribute("userSession");
+        User user = new User();
+        if (StringUtils.isEmpty(uid)){
+            user = (User) SecurityUtils.getSubject().getSession().getAttribute("userSession");
+        }
         PageInfo<UsereMediaBean> pageInfo = userMediaService.queryUserMediaByUname(user.getUsername(), startTime, endTime, start, length,uid);
         System.out.println("pageInfo.getTotal():" + pageInfo.getTotal());
         map.put("draw", draw);

@@ -26,4 +26,6 @@ public interface UserMediaService extends IService<UserMedia> {
     public int thisMonthPlayCount();
 
     public int totalPlayCount();
+
+    public int totalSunPlayCount(Integer uid);
 }

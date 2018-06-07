@@ -99,7 +99,9 @@ public class HomeController {
     }
 
     @RequestMapping("/myMediaPage")
-    public String viewuserMedias() {
+    public String viewuserMedias(Model model) {
+        Integer uid = (Integer) SecurityUtils.getSubject().getSession().getAttribute("userSessionId");
+        model.addAttribute("totalPlayCount",userMediaService.totalSunPlayCount(uid));
         return "myMedia/mymedias";
     }
 
@@ -115,6 +117,7 @@ public class HomeController {
 
     @RequestMapping(value = {"/statisticsPage", ""})
     public String statisticsPage(Model model) {
+
         Integer userid = (Integer) SecurityUtils.getSubject().getSession().getAttribute("userSessionId");
         boolean flag = true;
         Map<String,Object> map = new HashMap<>();
@@ -132,7 +135,7 @@ public class HomeController {
         model.addAttribute("totalUsers",userService.totalUser());
         model.addAttribute("totalMedias",mediaService.totalMedia());
         if (flag){
-
+            model.addAttribute("totalPlayCount",userMediaService.totalSunPlayCount(userid));
             return "myMedia/mymedias";
         }else {
             return "mediaStatitics/mediaStatistics";
@@ -141,6 +144,7 @@ public class HomeController {
 
     @RequestMapping("/userMediaInfo")
     public String userMediaInfo(User user, Model model) {
+        model.addAttribute("totalPlayCount",userMediaService.totalSunPlayCount(user.getId()));
         model.addAttribute("uid", user.getId());
         model.addAttribute("uName", user.getUsername().toString());
         return "userMediaInfo/userMediaInfo";

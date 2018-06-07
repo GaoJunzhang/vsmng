@@ -65,5 +65,9 @@ public class UserMediaServiceImpl extends BaseService<UserMedia> implements User
         return userMediaMapper.totalPlayCount();
     }
 
+    public int totalSunPlayCount(Integer uid){
+        return userMediaMapper.totalSunPlayCount(uid);
+    }
+
 
 }

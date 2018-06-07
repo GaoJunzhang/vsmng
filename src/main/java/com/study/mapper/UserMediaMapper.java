@@ -30,5 +30,7 @@ public interface UserMediaMapper extends MyMapper<UserMedia> {
 
     public int totalPlayCount();
 
+    public int totalSunPlayCount(@Param("uid") Integer uid);
+
 
 }
