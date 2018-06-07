@@ -32,4 +32,6 @@ public interface UserService extends IService<User> {
 
     public void updateLimit(short isLimit,int id);
 
+    public void updateRemark(int id,String remark);
+
 }

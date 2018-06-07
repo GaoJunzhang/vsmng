@@ -222,4 +222,14 @@ public class UserController {
         }
     }
 
+    @RequestMapping(value = "updateRemark",method = RequestMethod.POST)
+    public String updateRemark(@RequestParam(value = "id") int id,@RequestParam(value = "remark") String remark){
+        try {
+            userService.updateRemark(id,remark);
+            return "success";
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "fail";
+        }
+    }
 }

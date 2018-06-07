@@ -39,6 +39,8 @@ public class UserBean {
 
     private Short isLimit;
 
+    private String remark;
+
     public Integer getVaildPlayCount() {
         return this.sumcount - this.usedPlayCount;
     }

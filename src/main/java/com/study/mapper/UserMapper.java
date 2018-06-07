@@ -16,4 +16,6 @@ public interface UserMapper extends MyMapper<User> {
 
     public void updateLimit(@Param("isLimit") short isLimit,@Param("id") Integer id);
 
+    public void updateRemark(@Param("id") int id,@Param("remark") String remark);
+
 }

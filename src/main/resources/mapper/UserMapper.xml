@@ -16,6 +16,8 @@
         <result column="logout_time" jdbcType="TIMESTAMP" property="logoutTime"/>
         <result column="realyname" jdbcType="VARCHAR" property="realyname"/>
         <result column="is_limit" jdbcType="SMALLINT" property="isLimit"/>
+        <result column="remark" jdbcType="VARCHAR" property="remark"/>
+
     </resultMap>
     <update id="batchUpdateCount" parameterType="java.util.List">
         <foreach collection="list" item="item" index="index" open="" close="" separator=";">
@@ -36,6 +38,11 @@
             <set>logout_time=#{logoutTime}</set>
         </if>
             where username=#{username}
+    </update>
+    <update id="updateRemark" parameterType="com.study.model.User">
+        update user
+        <set>remark=#{remark}</set>
+        where id=#{id}
     </update>
     <select id="totalUser" resultType="java.lang.Integer">
         select count(id) from user;

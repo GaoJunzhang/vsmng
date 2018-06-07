@@ -40,6 +40,8 @@ public class User implements Serializable {
     @Column(name = "is_limit")
     private Short isLimit;
 
+    private String remark;
+
     /**
      * @return id
      */
@@ -180,5 +182,13 @@ public class User implements Serializable {
 
     public void setIsLimit(Short isLimit) {
         this.isLimit = isLimit;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 }

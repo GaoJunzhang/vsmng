@@ -39,7 +39,7 @@ public class ApiWebController {
         try {
             User user = userService.selectByUsername(username);
             int spalycount = 0;
-            if (user.getIsLimit()==0){//是否限制次数（0是1否）
+            if (user.getIsLimit() == 0) {//是否限制次数（0是1否）
                 map.put("playLimit", true);
                 map.put("userTotalPlay", user.getSumcount());
                 if (user.getSumcount() <= 0) {
@@ -53,7 +53,7 @@ public class ApiWebController {
                     jsonResult = new JsonResult(ResultCode.SYS_ERROR, "该账号可播放次数为0", map);
                     return jsonResult;
                 }
-            }else {
+            } else {
                 map.put("playLimit", false);
             }
 
@@ -71,7 +71,7 @@ public class ApiWebController {
             userMedia.setPlaytime(new Timestamp(System.currentTimeMillis()));
             userMediaService.save(userMedia);
             spalycount += 1;
-            map.put("usedPlay",spalycount);
+            map.put("usedPlay", spalycount);
             map.put("validPlay", user.getSumcount() - spalycount);
         } catch (Exception e) {
             e.printStackTrace();
@@ -89,14 +89,18 @@ public class ApiWebController {
 
         User user = userService.selectByUsername(username);
         Map<String, Object> map = map = new HashMap<String, Object>();
-        map.put("userTotalPlay", user.getSumcount());
-        if (user.getSumcount() <= 0) {
-            jsonResult = new JsonResult(ResultCode.SYS_ERROR, "该账号未授权播放", map);
-            return jsonResult;
-        }
         int spalycount = userMediaService.sumPalyCount(user.getId());
+        if (user.getIsLimit() == 0) {//是否限制次数（0是1否）
+            map.put("userTotalPlay", user.getSumcount());
+            if (user.getSumcount() <= 0) {
+                jsonResult = new JsonResult(ResultCode.SYS_ERROR, "该账号未授权播放", map);
+                return jsonResult;
+            }
+            map.put("validPlay", user.getSumcount() - spalycount);
+        } else {
+            map.put("playLimit", false);
+        }
         map.put("usedPlay", spalycount);
-        map.put("validPlay", user.getSumcount() - spalycount);
         jsonResult = new JsonResult(ResultCode.SUCCESS, "成功", map);
         return jsonResult;
     }
@@ -106,7 +110,7 @@ public class ApiWebController {
         JsonResult jsonResult;
         String username = request.getAttribute("username") + "";
 
-        userService.updateLoggerByUname(null,new Timestamp(System.currentTimeMillis()),username);
+        userService.updateLoggerByUname(null, new Timestamp(System.currentTimeMillis()), username);
         jsonResult = new JsonResult(ResultCode.SUCCESS, "注销成功", null);
         return jsonResult;
     }

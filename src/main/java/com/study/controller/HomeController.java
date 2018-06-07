@@ -117,12 +117,14 @@ public class HomeController {
 
     @RequestMapping(value = {"/statisticsPage", ""})
     public String statisticsPage(Model model) {
+        User u = (User) SecurityUtils.getSubject().getSession().getAttribute("userSession");
+        User user = userService.selectByUsername(u.getUsername());
 
-        Integer userid = (Integer) SecurityUtils.getSubject().getSession().getAttribute("userSessionId");
+//        Integer userid = (Integer) SecurityUtils.getSubject().getSession().getAttribute("userSessionId");
         boolean flag = true;
         Map<String,Object> map = new HashMap<>();
         map.put("type",1);
-        map.put("userid",userid);
+        map.put("userid",user.getId());
         List<Resources> resourcesList = resourcesService.loadUserResources(map);
         for(int i=0 ;i<resourcesList.size();i++){
             if (resourcesList.get(i).getResurl().contains("statisticsPage")){
@@ -130,12 +132,13 @@ public class HomeController {
                 break;
             }
         }
+        model.addAttribute("remark",user.getRemark());
         model.addAttribute("sumMonthPlay",userMediaService.thisMonthPlayCount());
         model.addAttribute("totalPlay",userMediaService.totalPlayCount());
         model.addAttribute("totalUsers",userService.totalUser());
         model.addAttribute("totalMedias",mediaService.totalMedia());
         if (flag){
-            model.addAttribute("totalPlayCount",userMediaService.totalSunPlayCount(userid));
+            model.addAttribute("totalPlayCount",userMediaService.totalSunPlayCount(user.getId()));
             return "myMedia/mymedias";
         }else {
             return "mediaStatitics/mediaStatistics";

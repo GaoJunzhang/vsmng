@@ -77,7 +77,7 @@
         where t.id in(SELECT um.mid from user_media um where um.uid=#{uid})
     </select>
     <select id="userMediaStatistics" parameterType="java.lang.String" resultType="com.study.bean.UserBean">
-        SELECT u.id,u.username,u.realyname,u.sumcount,(SELECT count(id) from user_media WHERE uid=u.id) as usedPlayCount FROM user u
+        SELECT u.id,u.username,u.realyname,u.sumcount,u.remark,(SELECT count(id) from user_media WHERE uid=u.id) as usedPlayCount FROM user u
         WHERE 1=1
         <if test="username!=null and username != ''">
             and u.username like "%"#{username}"%"

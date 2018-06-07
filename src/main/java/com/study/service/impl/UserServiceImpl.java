@@ -257,4 +257,7 @@ public class UserServiceImpl extends BaseService<User> implements UserService {
     public void updateLimit(short isLimit,int id){
         userMapper.updateLimit(isLimit,id);
     }
+    public void updateRemark(int id,String remark){
+        userMapper.updateRemark(id,remark);
+    }
 }

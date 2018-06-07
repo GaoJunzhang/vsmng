@@ -100,7 +100,8 @@ $(document).ready(function () {
             {"data": "usedPlayCount"},
             {"data": "vaildPlayCount"},
             {"data": "sumcount"},
-            {"data": "playprogress"}
+            {"data": "playprogress"},
+            {"data": "remark"}
         ],
         columnDefs: [
             {"orderable": false, "targets": 1},
@@ -108,13 +109,13 @@ $(document).ready(function () {
                 "orderable": false,
                 "render": function (data, type, row) {
                     if (data > 0) {
-                        return "<a href='/userMediaInfo?id="+row.id+"&username="+row.username+"'><span class='label label-important'>" + data + "</span></a>";
+                        return "<a href='/userMediaInfo?id=" + row.id + "&username=" + row.username + "'><span class='label label-important'>" + data + "</span></a>";
                     } else {
                         return "<span class='badge'>" + data + "</span>";
                     }
                 },
                 "targets": 2
-            },{
+            }, {
                 "orderable": false,
                 "render": function (data, type, row) {
                     if (data > 0) {
@@ -128,8 +129,8 @@ $(document).ready(function () {
             }, {
                 "orderable": false,
                 "render": function (data, type, row) {
-                    if (row.sumcount>0){
-                        var vp = (row.vaildPlayCount / row.sumcount).toFixed(2)*100;
+                    if (row.sumcount > 0) {
+                        var vp = (row.vaildPlayCount / row.sumcount).toFixed(2) * 100;
                         if (vp < 30) {
                             return "<div class='progress progress-striped progress-danger active'><div class='bar' style='width: " + vp + "%;'></div></div>";
                         }
@@ -139,19 +140,32 @@ $(document).ready(function () {
                         if (vp >= 60) {
                             return "<div class='progress progress-striped progress-success active'><div class='bar' style='width: " + vp + "%;'></div></div>";
                         }
-                    }else {
+                    } else {
                         return data;
                     }
 
                 },
                 "targets": 5
             },
+            {
+                "orderable": false,
+                "render": function (data, type, row) {
+                    if (data != null&&data!='') {
+                        console.log(data);
+                        return "<button class=\"btn btn-success\" onclick=\"updateRemark('" + row.id + "','"+data+"')\">编辑</button>";
+                    } else {
+                        return "<button class='btn btn-danger' onclick='updateRemark(" + row.id + ")'>设置</button>";
+                    }
+                },
+                "targets": 6
+            }
         ],
 
     });
 
 
 });
+
 function search() {
     table.ajax.reload();
 }
@@ -183,3 +197,38 @@ function getQueryCondition1(data) {
     return param;
 }
 
+function updateRemark(uid, remark) {
+    console.log(uid);
+    console.log(remark);
+    if ($('#setRemarAuth').val()=='1'){
+
+        $('#remark').val(remark);
+        $('#uid').val(uid);
+        $('#remarkCount').modal('show');
+    }else {
+        layer.msg('无设置权限');
+    }
+}
+
+function setRemark() {
+    $.ajax({
+        cache: true,
+        type: "POST",
+        url: 'users/updateRemark',
+        data: {
+            id: $('#uid').val(),
+            remark: $('#remark').val()
+        },
+        async: false,
+        success: function (data) {
+            if (data == "success") {
+                layer.msg('设置成功');
+                table.ajax.reload();
+                $('#remarkCount').modal('hide');
+            } else {
+                layer.msg('设置失败');
+                // $('#remarkCount').modal('hide');
+            }
+        }
+    });
+}
