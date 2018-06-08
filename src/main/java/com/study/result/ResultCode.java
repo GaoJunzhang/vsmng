@@ -11,7 +11,7 @@ public enum ResultCode {
     NOT_LOGIN("400", "没有登录"),
 
     /** 发生异常 */
-    EXCEPTION("401", "发生异常"),
+    EXCEPTION("411", "发生异常"),
 
     /** 系统错误 */
     SYS_ERROR("402", "系统错误"),
@@ -29,7 +29,11 @@ public enum ResultCode {
     TOO_FREQUENT("445", "太频繁的调用"),
 
     /** 未知的错误 */
-    UNKNOWN_ERROR("499", "未知错误");
+    UNKNOWN_ERROR("499", "未知错误"),
+
+    ACCOUT_ERROR("401","账号错误"),
+
+    UNAUTHORIZED("404","权限不足");
 
     private ResultCode(String value, String msg){
         this.val = value;

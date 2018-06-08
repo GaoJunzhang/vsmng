@@ -36,7 +36,7 @@ public class JsonWebToken {
         }
         User userBean = userService.selectByUsername(user.getUsername());
         if (userBean == null) {
-            jsonResult = new JsonResult(ResultCode.NOT_LOGIN, "账号错误", null);
+            jsonResult = new JsonResult(ResultCode.ACCOUT_ERROR, "账号错误", null);
             return jsonResult;
         } else {
             PasswordHelper passwordHelper = new PasswordHelper();
@@ -50,7 +50,7 @@ public class JsonWebToken {
             userService.updateLoggerByUname(new Timestamp(System.currentTimeMillis()),null,user.getUsername());
         } catch (Exception e) {
             e.printStackTrace();
-            jsonResult = new JsonResult(ResultCode.SYS_ERROR, "error", null);
+            jsonResult = new JsonResult(ResultCode.EXCEPTION, "系统异常", null);
             return jsonResult;
         }
         //拼装accessToken
