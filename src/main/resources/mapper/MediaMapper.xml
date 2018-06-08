@@ -23,6 +23,9 @@
   <select id="totalMedia" resultType="java.lang.Integer">
     select count(id) from media;
   </select>
+  <select id="queryMediaByUid" parameterType="int" resultType="com.study.model.Media">
+    SELECT t.id,t.name,t.createtime from media t where t.id in (SELECT t1.media_id from user_message t1 where t1.uid=#{uid})
+  </select>
 <!--  &lt;update id="updateMedia" parameterType="com.study.model.Media"&gt;
         update media set playcount=#{playcount} where id=#{id}
 &lt;/update&gt;-->

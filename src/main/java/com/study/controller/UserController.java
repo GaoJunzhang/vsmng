@@ -2,7 +2,9 @@ package com.study.controller;
 
 import com.github.pagehelper.PageInfo;
 import com.study.model.User;
+import com.study.model.UserMessage;
 import com.study.model.UserRole;
+import com.study.service.UserMessageService;
 import com.study.service.UserRoleService;
 import com.study.service.UserService;
 import com.study.util.ExcelUtil;
@@ -36,6 +38,9 @@ public class UserController {
     private UserService userService;
     @Resource
     private UserRoleService userRoleService;
+
+    @Resource
+    private UserMessageService userMessageService;
 
     @RequestMapping
     public Map<String, Object> getAll(User user, String draw,
@@ -153,8 +158,6 @@ public class UserController {
             values[i][0] = user.getUsername() + "";
             values[i][1] = user.getRealyname() + "";
             values[i][2] = user.getSumcount() + "";
-            System.out.println("00000000000000000");
-            System.out.println(user.getEnable());
             if (0 == user.getEnable()) {
                 values[i][3] = "关闭";
             } else {
@@ -223,8 +226,19 @@ public class UserController {
     }
 
     @RequestMapping(value = "updateRemark",method = RequestMethod.POST)
-    public String updateRemark(@RequestParam(value = "id") int id,@RequestParam(value = "remark") String remark){
+    public String updateRemark(@RequestParam(value = "id") int id,@RequestParam(value = "remark") String remark,Integer ids[]){
         try {
+            if (ids.length>0){
+                System.out.println(userMessageService.deleteByUid(id));
+                List<UserMessage> list = new ArrayList<UserMessage>(ids.length);
+                for (int i=0;i<ids.length;i++){
+                    UserMessage userMessage = new UserMessage();
+                    userMessage.setUid(id);
+                    userMessage.setMediaId(ids[i]);
+                    list.add(userMessage);
+                }
+                userMessageService.batchInsert(list);
+            }
             userService.updateRemark(id,remark);
             return "success";
         } catch (Exception e) {

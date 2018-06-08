@@ -15,4 +15,6 @@ public class UserMessageBean implements Serializable{
     private Integer mediaId;
 
     private String mediaName;
+
+    private String name;
 }

@@ -52,4 +52,7 @@ public class MediaServiceImpl extends BaseService<Media> implements MediaService
     public int sumPalyCount(Integer uid){
         return  mediaMapper.sumPalyCount(uid);
     }*/
+ public List<Media> queryMediaByUid(int uid){
+     return mediaMapper.queryMediaByUid(uid);
+ }
 }

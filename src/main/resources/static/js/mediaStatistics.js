@@ -1,5 +1,7 @@
 var table;
+var tableMedia;
 $(document).ready(function () {
+
     $('.selectData').datepicker({
         autoclose: true, //自动关闭
         language: 'zh-CN',
@@ -66,7 +68,6 @@ $(document).ready(function () {
         "sPaginationType": "full_numbers",
         "serverSide": true,//开启服务器模式，使用服务器端处理配置datatable
         "processing": true,//开启读取服务器数据时显示正在加载中……特别是大数据量的时候，开启此功能比较好
-        //"ajax": '${ss}/user/userList.do',
         ajax: function (data, callback, settings) {
             //封装请求参数
             var param = getQueryCondition(data);
@@ -118,30 +119,52 @@ $(document).ready(function () {
             }, {
                 "orderable": false,
                 "render": function (data, type, row) {
-                    if (data > 0) {
+                    if (row.isLimit==0){
 
-                        return "<span class='badge badge-success'>" + data + "</span>";
-                    } else {
-                        return "<span class='badge'>" + data + "</span>";
+                        if (data > 0) {
+
+                            return "<span class='badge badge-success'>" + data + "</span>";
+                        } else {
+                            return "<span class='badge'>" + data + "</span>";
+                        }
+                    }else {
+                        return "<span class=\"label label-info\">无限</span>";
                     }
                 },
                 "targets": 3
-            }, {
+            },
+            {
                 "orderable": false,
                 "render": function (data, type, row) {
-                    if (row.sumcount > 0) {
-                        var vp = (row.vaildPlayCount / row.sumcount).toFixed(2) * 100;
-                        if (vp < 30) {
-                            return "<div class='progress progress-striped progress-danger active'><div class='bar' style='width: " + vp + "%;'></div></div>";
-                        }
-                        if (vp >= 30 && vp < 50) {
-                            return "<div class='progress progress-striped progress-warning active'><div class='bar' style='width: " + vp + "%;'></div></div>";
-                        }
-                        if (vp >= 60) {
-                            return "<div class='progress progress-striped progress-success active'><div class='bar' style='width: " + vp + "%;'></div></div>";
-                        }
-                    } else {
+                    if (row.isLimit==1){
+                        return "<span class=\"label label-info\">无限</span>";
+                    }else {
                         return data;
+                    }
+                },
+                "targets": 4
+            },
+            {
+                "orderable": false,
+                "render": function (data, type, row) {
+                    if (row.isLimit==0){
+
+                        if (row.sumcount > 0) {
+                            var vp = (row.vaildPlayCount / row.sumcount).toFixed(2) * 100;
+                            if (vp < 30) {
+                                return "<div class='progress progress-striped progress-danger active'><div class='bar' style='width: " + vp + "%;'></div></div>";
+                            }
+                            if (vp >= 30 && vp < 50) {
+                                return "<div class='progress progress-striped progress-warning active'><div class='bar' style='width: " + vp + "%;'></div></div>";
+                            }
+                            if (vp >= 60) {
+                                return "<div class='progress progress-striped progress-success active'><div class='bar' style='width: " + vp + "%;'></div></div>";
+                            }
+                        } else {
+                            return data;
+                        }
+                    }else{
+                        return "<div class='progress progress-striped progress-success active'><div class='bar' style='width:100%;'></div></div>";
                     }
 
                 },
@@ -162,12 +185,66 @@ $(document).ready(function () {
         ],
 
     });
+    tableMedia = $('#datatableMedia').DataTable({
+        "dom": '<"top"i>rt<"bottom"flp><"clear">',
+        "searching": false,
+        "bJQueryUI": true,
+        "sPaginationType": "full_numbers",
+        "serverSide": true,//开启服务器模式，使用服务器端处理配置datatable
+        "processing": true,//开启读取服务器数据时显示正在加载中……特别是大数据量的时候，开启此功能比较好
+        ajax: function (data, callback, settings) {
+            //封装请求参数
+            var param = getQueryCondition1(data);
 
+            $.ajax({
+                type: "GET",
+                url: 'medias',
+                cache: false,  //禁用缓存
+                data: param,    //传入已封装的参数
+                dataType: "json",
+                success: function (result) {
+                    //封装返回数据  如果参数相同，可以直接返回result ，此处作为学习，先这么写了。
+                    var returnData = {};
+                    returnData.draw = result.draw;//这里直接自行返回了draw计数器,应该由后台返回
+                    returnData.recordsTotal = result.recordsTotal;//总记录数
+                    returnData.recordsFiltered = result.recordsFiltered;//后台不实现过滤功能，每次查询均视作全部结果
+                    returnData.data = result.data;
+                    //调用DataTables提供的callback方法，代表数据已封装完成并传回DataTables进行渲染
+                    //此时的数据需确保正确无误，异常判断应在执行此回调前自行处理完毕
+                    callback(returnData);
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert("查询失败");
+                }
+            });
+        },
+        "columns": [
+            {
+                "sClass": "text-center",
+                "data": "id",
+                "render": function (data, type, full, meta) {
+                    return '<input type="checkbox"  class="checkchild"  value="' + data + '" />';
+                },
+                "bSortable": false
+            },
+            // {"data": "id"},
+            {"data": "name"},
+            {"data": "createtime"}
+        ],
+        columnDefs: [
+            {"orderable": false, "targets": 1},
+            {"orderable": false, "targets": 2}
+        ],
+
+    });
 
 });
 
 function search() {
     table.ajax.reload();
+}
+function searchMedia() {
+    tableMedia.ajax.reload();
 }
 
 //封装查询参数
@@ -187,9 +264,7 @@ function getQueryCondition(data) {
 function getQueryCondition1(data) {
     var param = {};
     //组装排序参数
-    param.username = $("#name-search").val();//查询条件
-    param.startTime = $("#startTime-search").val();//查询条件
-    param.endTime = $("#endTime-search").val();//查询条件
+    param.name = $("#mediaName-search").val();//查询条件
     //组装分页参数
     param.start = data.start;
     param.length = data.length;
@@ -211,12 +286,17 @@ function updateRemark(uid, remark) {
 }
 
 function setRemark() {
+    var ids = new Array();
+    for(var i=0;i<$(".checkchild:checked").length;i++){
+        ids.push($(".checkchild:checked")[i].value);
+    }
     $.ajax({
         cache: true,
         type: "POST",
         url: 'users/updateRemark',
         data: {
             id: $('#uid').val(),
+            ids:ids.toString(),
             remark: $('#remark').val()
         },
         async: false,
@@ -231,4 +311,7 @@ function setRemark() {
             }
         }
     });
+}
+function showUserMessage() {
+    $('#userMessageDiv').show();
 }

@@ -57,7 +57,6 @@ public class ApiWebController {
             } else {
                 map.put("validPlay", 0);
                 map.put("userTotalPlay", 0);
-                map.put("usedPlay", spalycount);
                 map.put("playLimit", user.getIsLimit());
             }
             Media media = mediaService.findByName(mediaName.trim());
@@ -75,7 +74,10 @@ public class ApiWebController {
             userMediaService.save(userMedia);
             spalycount += 1;
             map.put("usedPlay", spalycount);
-            map.put("validPlay", user.getSumcount() - spalycount);
+            if (user.getIsLimit()==0){
+
+                map.put("validPlay", user.getSumcount() - spalycount);
+            }
         } catch (Exception e) {
             e.printStackTrace();
             jsonResult = new JsonResult(ResultCode.EXCEPTION, "系统异常", e);

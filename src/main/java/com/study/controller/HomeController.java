@@ -1,5 +1,6 @@
 package com.study.controller;
 
+import com.study.model.Media;
 import com.study.model.Resources;
 import com.study.model.User;
 import com.study.service.MediaService;
@@ -141,6 +142,17 @@ public class HomeController {
             model.addAttribute("totalPlayCount",userMediaService.totalSunPlayCount(user.getId()));
             return "myMedia/mymedias";
         }else {
+            List<Media> userMessageBeans = mediaService.queryMediaByUid(user.getId());
+            String userMessages = "";
+            if (userMessageBeans.size()>0){
+                for (int i=0; i<userMessageBeans.size(); i++){
+                    userMessages += userMessageBeans.get(i).getName()+",";
+                }
+                userMessages = userMessages.substring(0,userMessages.length()-1);
+            }else {
+                userMessages = "欢迎登录！"+user.getRealyname();
+            }
+            model.addAttribute("userMessages",userMessages);
             return "mediaStatitics/mediaStatistics";
         }
     }

@@ -17,11 +17,11 @@ public class UserMessageServiceImpl extends BaseService<UserMessage> implements 
     @Resource
     private UserMessageMapper userMessageMapper;
 
-    public List<UserMessageBean> queryByUid(Integer uid){
-        return userMessageMapper.queryByUid(uid);
-    }
-
     public void batchInsert(List<UserMessage> list){
         userMessageMapper.batchInsert(list);
+    }
+
+    public int deleteByUid(Integer uid){
+        return userMessageMapper.deleteByUid(uid);
     }
 }

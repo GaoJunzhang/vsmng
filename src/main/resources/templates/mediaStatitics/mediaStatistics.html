@@ -11,6 +11,7 @@
     <link th:href="@{/font-awesome/css/font-awesome.css}" rel="stylesheet"/>
     <link rel="stylesheet" th:href="@{/css/jquery.dataTables.min.css}"/>
     <link rel="stylesheet" th:href="@{/css/datepicker.css}"/>
+    <link rel="stylesheet" th:href="@{/css/jquery.gritter.css}" />
 
     <title>统计信息</title>
 </head>
@@ -28,11 +29,12 @@
 
 <div id="content">
     <div class="row-fluid">
-        <div class="span12" th:if="${remark}!=null" th:if="${remark}!=''">
-            <div class="alert alert-block"> <a class="close" data-dismiss="alert" href="#">×</a>
-                <h4 class="alert-heading">提示!</h4>
-                <span th:text="${remark}"></span></div>
+        <div class="span12" style="display: none;" id="userMessageDiv">
+            <div class="alert alert-error alert-block"> <a class="close" onclick="$('#userMessageDiv').hide()" href="#">×</a>
+                <h4 class="alert-heading"><i class="icon-flag"></i>&nbsp;提示</h4>
+                <span th:text="${userMessages}"></span></div>
         </div>
+        <input type="hidden" id="messageSpan" th:value="${remark}" />
     </div>
     <div class="row-fluid">
         <div class="span6">
@@ -144,7 +146,7 @@
     </div>
 </div>
 <!--备注弹框-->
-<div class="modal fade bs-example-modal-sm" id="remarkCount" tabindex="-1" role="dialog" aria-labelledby="addroleLabel">
+<div class="modal fade bs-example-modal-md" id="remarkCount" tabindex="-1" role="dialog" aria-labelledby="addroleLabel" style="width: 650px;">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -157,10 +159,25 @@
                     <input type="hidden" id="id" name="id"/>
                     <div class="form-group">
                         <label class="control-label">用户播放提示:</label>
-                            <textarea id="remark" class="span11" style="width: 100%;height: 80px;"></textarea>
+                            <textarea id="remark" class="span11" style="width: 100%;height: 50px;"></textarea>
                             <input type="hidden" id="uid" />
                     </div>
                 </form>
+                    <div class="widget-box">
+                            <input type="text" class="form-control" id="mediaName-search" placeholder="名称"/>
+                            <button type="button" onclick="searchMedia();" class="btn btn-primary">查询</button>
+                        <table class="table table-bordered data-table" id="datatableMedia">
+                            <thead>
+                            <tr>
+                                <th>
+                                    <input type="checkbox" class="checkall"/>
+                                </th>
+                                <th>资源名称</th>
+                                <th>创建时间</th>
+                            </tr>
+                            </thead>
+                        </table>
+                    </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
@@ -184,17 +201,20 @@
 <script th:src="@{/js/mediaStatistics.js}"></script>
 <script th:src="@{/js/bootstrap-datepicker.js}"></script>
 <script th:src="@{/js/locales/bootstrap-datepicker.zh-CN.js}"></script>
-<!--<script type="text/javascript">
-    $('.selectData').datepicker({
-        format: 'yyyymm',
-        weekStart: 1,
-        autoclose: true,
-        startView: 3,
-        minView: 3,
-        forceParse: false,
-        language: 'zh-CN'
+<script th:src="@{/js/jquery.gritter.min.js}"></script>
+<script type="text/javascript">
+    var umsg = $("#messageSpan").val();
+    if (umsg==null||umsg==''){
+        umsg = "当前暂无任务，欢迎使用！";
+    }
+    $.gritter.add({
+        title:	'任务',
+        text:	'<a href="#" onclick="showUserMessage()">'+umsg+'</a>',
+        image: 	'img/demo/envelope.png',
+        sticky: false,
+        time:50000
     });
-</script>-->
+</script>
 
 </body>
 </html>

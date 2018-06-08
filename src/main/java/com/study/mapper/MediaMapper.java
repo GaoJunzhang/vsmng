@@ -4,6 +4,8 @@ import com.study.model.Media;
 import com.study.util.MyMapper;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
+
 public interface MediaMapper extends MyMapper<Media> {
     public Media findMediaByName(@Param("name")String name);
 
@@ -13,4 +15,6 @@ public interface MediaMapper extends MyMapper<Media> {
 
 //    int sumPalyCount(Integer uid);//用户总的播放次数
     int totalMedia();
+
+    public List<Media> queryMediaByUid(@Param("uid") int uid);
 }
