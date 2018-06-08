@@ -206,6 +206,8 @@ public class UserServiceImpl extends BaseService<User> implements UserService {
                         User user = new User();
                         user.setUsername(username);
                         user.setPassword(password);
+                        user.setIsLimit((short)0);
+                        user.setEnable(1);
                         tempUserKB.setPassword(passwordHelper.getPassword(user));
                     }
                 } else {

@@ -86,7 +86,8 @@ public class UserController {
             user.setEnable(1);
             PasswordHelper passwordHelper = new PasswordHelper();
             passwordHelper.encryptPassword(user);
-            user.setSumcount(0);
+//            user.setSumcount(user。);
+            user.setIsLimit((short)0);
             userService.save(user);
             return "success";
         } catch (Exception e) {
