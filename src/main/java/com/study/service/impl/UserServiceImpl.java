@@ -206,14 +206,16 @@ public class UserServiceImpl extends BaseService<User> implements UserService {
                         User user = new User();
                         user.setUsername(username);
                         user.setPassword(password);
-                        user.setIsLimit((short)0);
-                        user.setEnable(1);
                         tempUserKB.setPassword(passwordHelper.getPassword(user));
+                        tempUserKB.setSumcount(Integer.parseInt(sumcount));
+                        tempUserKB.setRealyname(realname);
+
                     }
                 } else {
                     rowMessage += "第" + (c + 1) + "列数据有问题，请仔细检查；";
                 }
             }
+            tempUserKB.setIsLimit((short)0);
             tempUserKB.setEnable(1);
             //拼接每行的错误提示
             if (!StringUtils.isEmpty(rowMessage)) {

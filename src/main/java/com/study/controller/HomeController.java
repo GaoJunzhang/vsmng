@@ -159,9 +159,23 @@ public class HomeController {
 
     @RequestMapping("/userMediaInfo")
     public String userMediaInfo(User user, Model model) {
-        model.addAttribute("totalPlayCount",userMediaService.totalSunPlayCount(user.getId()));
-        model.addAttribute("uid", user.getId());
-        model.addAttribute("uName", user.getUsername().toString());
+        User user1 = userService.selectByUsername(user.getUsername());
+        model.addAttribute("totalPlayCount",userMediaService.totalSunPlayCount(user1.getId()));
+        model.addAttribute("uid", user1.getId());
+        model.addAttribute("uName", user1.getUsername()+"");
+        model.addAttribute("realyName", user1.getRealyname()+"");
+        List<Media> userMessageBeans = mediaService.queryMediaByUid(user1.getId());
+        String userMessages = "";
+        if (userMessageBeans.size()>0){
+            for (int i=0; i<userMessageBeans.size(); i++){
+                userMessages += userMessageBeans.get(i).getName()+",";
+            }
+            userMessages = userMessages.substring(0,userMessages.length()-1);
+        }else {
+            userMessages = "欢迎登录！"+user1.getRealyname();
+        }
+        model.addAttribute("remark",user1.getRemark());
+        model.addAttribute("userMessages",userMessages);
         return "userMediaInfo/userMediaInfo";
     }
 

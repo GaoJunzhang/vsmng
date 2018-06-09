@@ -154,7 +154,7 @@ $(document).ready(function () {
                             if (vp < 30) {
                                 return "<div class='progress progress-striped progress-danger active'><div class='bar' style='width: " + vp + "%;'></div></div>";
                             }
-                            if (vp >= 30 && vp < 50) {
+                            if (vp >= 30 && vp < 60) {
                                 return "<div class='progress progress-striped progress-warning active'><div class='bar' style='width: " + vp + "%;'></div></div>";
                             }
                             if (vp >= 60) {
