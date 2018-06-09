@@ -158,4 +158,12 @@ public class UserMediaController {
         map.put("data", pageInfo.getList());
         return map;
     }
+
+    @RequestMapping(value = "/getUserMediaCount",method = RequestMethod.GET)
+    public String getUserMediaCount(@RequestParam(required = false) String mediaName,
+                                    @RequestParam(required = false) String startTime,
+                                    @RequestParam(required = false) String endTime){
+
+        return userMediaService.getUserMediaCount(mediaName,startTime,endTime)+"";
+    }
 }

@@ -102,4 +102,16 @@
     <select id="totalSunPlayCount" parameterType="int" resultType="int">
         select count(id) from user_media where uid=#{uid}
     </select>
+    <select id="getUserMediaCount"  resultType="int">
+        SELECT count(t.id) from user_media t,media m where t.mid=m.id
+        <if test="mediaName!=null and mediaName!=''">
+            and  m.name like "%"#{mediaName}"%"
+        </if>
+        <if test="startTime!=null and startTime!=''">
+            and t.playtime&gt;=#{startTime}
+        </if>
+        <if test="endTime!=null and endTime!=''">
+            and t.playtime&lt;= #{endTime}
+        </if>
+    </select>
 </mapper>

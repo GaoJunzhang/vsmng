@@ -4,7 +4,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <link rel="icon" type="image/x-icon" th:href="@{/img/favicon.ico}">
-    <link rel="stylesheet" th:href="@{/css/bootstrapnew.min.css}"/>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}"/>
     <link rel="stylesheet" th:href="@{/css/bootstrap-responsive.min.css}"/>
     <link rel="stylesheet" th:href="@{/css/matrix-style.css}"/>
     <link rel="stylesheet" th:href="@{/css/matrix-media.css}"/>
@@ -30,8 +30,8 @@
 <div id="content">
     <div class="row-fluid">
         <div class="span12" style="display: none;" id="userMessageDiv">
-            <div class="alert alert-error alert-block"> <a class="close" onclick="$('#userMessageDiv').hide()" href="#">×</a>
-                <h4 class="alert-heading"><i class="icon-flag"></i>&nbsp;提示</h4>
+            <div class="alert alert-success alert-block"> <a class="close" onclick="$('#userMessageDiv').hide()" href="#">×</a>
+                <h4 class="alert-heading"><i class="icon-flag"></i>&nbsp;可播放视频</h4>
                 <span th:text="${userMessages}"></span></div>
         </div>
         <input type="hidden" id="messageSpan" th:value="${remark}" />
@@ -78,6 +78,38 @@
                 </div>
             </div>
         </div>
+    </div>
+    <div class="row-fluid">
+            <div class="widget-box">
+                <!--<div class="widget-title"> <span class="icon"> <i class="icon-hand-right"></i> </span>-->
+                <!--<h5>Tooltip directions</h5>-->
+                <!--</div>-->
+                <div class="widget-title"><span class="icon"><i class="icon-th"></i></span>
+                    <h5>视频播放统计</h5>
+                </div>
+                <form class="form-inline">
+                    <div class="form-group span1">
+                        <input type="text" class="form-control" id="tmediaName-search" placeholder="视频名称"/>
+                    </div>
+                    <div class="form-group span1">
+                        <input type="text" id="tstartTime-search" id="tstartTime-search" data-date-format="yyyy-mm-dd"
+                               placeholder="开始时间"
+                               class="form-control selectData">
+                    </div>
+                    <div class="form-group span1">
+                        <input type="text" id="tendTime-search" name="tendTime-search" data-date-format="yyyy-mm-dd"
+                               placeholder="结束时间" class="form-control selectData">
+                    </div>
+                    <div class="form-group span1">
+                    <button type="button" onclick="mediaSearch();" class="btn btn-primary span1" style="width: 100%;">统计</button>
+                    </div>
+                    <div class="form-group span2">
+                        <input type="text" id="mediaCount" style="background-color: #28b779" readonly="readonly" class="form-control ">
+                        <!--<span class="label label-warning" id="mediaCount" style="height: 100%;font-size: 20px"></span>-->
+                    </div>
+                    <!--<div class="txt"> 总播放次数: <span class="by label">Alex</span> <span class="date badge badge-warning">88</span> </div>-->
+                </form>
+            </div>
     </div>
     <div class="row-fluid">
         <div class="span12">
@@ -205,10 +237,10 @@
 <script type="text/javascript">
     var umsg = $("#messageSpan").val();
     if (umsg==null||umsg==''){
-        umsg = "当前暂无任务，欢迎使用！";
+        umsg = "当前暂无留言，欢迎使用！";
     }
     $.gritter.add({
-        title:	'任务',
+        title:	'留言板',
         text:	'<a href="#" onclick="showUserMessage()">'+umsg+'</a>',
         image: 	'img/demo/envelope.png',
         sticky: false,

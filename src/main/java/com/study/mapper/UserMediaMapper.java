@@ -32,5 +32,8 @@ public interface UserMediaMapper extends MyMapper<UserMedia> {
 
     public int totalSunPlayCount(@Param("uid") Integer uid);
 
+    public int getUserMediaCount(@Param("mediaName") String mediaName, @Param("startTime") String startTime,
+                                 @Param("endTime") String endTime);
+
 
 }

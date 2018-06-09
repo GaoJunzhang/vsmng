@@ -138,23 +138,23 @@ public class HomeController {
         model.addAttribute("totalPlay",userMediaService.totalPlayCount());
         model.addAttribute("totalUsers",userService.totalUser());
         model.addAttribute("totalMedias",mediaService.totalMedia());
+        List<Media> userMessageBeans = mediaService.queryMediaByUid(user.getId());
+        String userMessages = "";
+        if (userMessageBeans.size()>0){
+            for (int i=0; i<userMessageBeans.size(); i++){
+                userMessages += userMessageBeans.get(i).getName()+",";
+            }
+            userMessages = userMessages.substring(0,userMessages.length()-1);
+        }else {
+            userMessages = "欢迎登录！"+user.getRealyname();
+        }
+        model.addAttribute("userMessages",userMessages);
         if (flag){
             model.addAttribute("uName",user.getUsername());
             model.addAttribute("uid",user.getId());
             model.addAttribute("totalPlayCount",userMediaService.totalSunPlayCount(user.getId()));
             return "myMedia/mymedias";
         }else {
-            List<Media> userMessageBeans = mediaService.queryMediaByUid(user.getId());
-            String userMessages = "";
-            if (userMessageBeans.size()>0){
-                for (int i=0; i<userMessageBeans.size(); i++){
-                    userMessages += userMessageBeans.get(i).getName()+",";
-                }
-                userMessages = userMessages.substring(0,userMessages.length()-1);
-            }else {
-                userMessages = "欢迎登录！"+user.getRealyname();
-            }
-            model.addAttribute("userMessages",userMessages);
             return "mediaStatitics/mediaStatistics";
         }
     }

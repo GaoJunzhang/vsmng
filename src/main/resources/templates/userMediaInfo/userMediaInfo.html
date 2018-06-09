@@ -39,7 +39,7 @@
     <div class="row-fluid">
         <div class="span12" style="display: none;" id="userMessageDiv">
             <div class="alert alert-success alert-block"> <a class="close" onclick="$('#userMessageDiv').hide()" href="#">×</a>
-                <h4 class="alert-heading"><i class="icon-flag"></i>&nbsp;提示</h4>
+                <h4 class="alert-heading"><i class="icon-flag"></i>&nbsp;可以播放视频</h4>
                 <span th:text="${userMessages}"></span></div>
         </div>
         <input type="hidden" id="messageSpan" th:value="${remark}" />
@@ -191,10 +191,10 @@
     });
     var umsg = $("#messageSpan").val();
     if (umsg==null||umsg==''){
-        umsg = "当前暂无任务，欢迎使用！";
+        umsg = "当前暂无留言，欢迎使用！";
     }
     $.gritter.add({
-        title:	'任务',
+        title:	'留言板',
         text:	'<a href="#" onclick="showUserMessage()">'+umsg+'</a>',
         image: 	'img/demo/envelope.png',
         sticky: false,

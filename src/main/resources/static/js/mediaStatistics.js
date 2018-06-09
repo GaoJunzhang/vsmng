@@ -142,9 +142,13 @@ $(document).ready(function () {
                 "orderable": false,
                 "render": function (data, type, row) {
                     if (data > 0) {
-                        return "<a href='/userMediaInfo?id=" + row.id + "&username=" + row.username + "'><span class='label label-important'>" + data + "</span></a>";
+
+                        // return "<button class=\"btn btn-success  btn-large\" onclick=\"viewUserMediaInfo('" + row.id + "','"+row.username+"')\">" + data + "次</button>";
+                        return "<a href='/userMediaInfo?id=" + row.id + "&username=" + row.username + "' class=\"g\"><span class='badge badge-important' style='font-size: 15px'>" + data + "</span></a>";
                     } else {
-                        return "<span class='badge'>" + data + "</span>";
+                        // return "<button class=\"btn btn-danger  btn-large\" onclick=\"viewUserMediaInfo('" + row.id + "','"+row.username+"')\">" + data + "次</button>";
+                        // return "<span class='badge'>" + data + "</span>";
+                        return "<a href='/userMediaInfo?id=" + row.id + "&username=" + row.username + "' class=\"g\"><span class='badge' style='font-size: 15px'>" + data + "</span></a>";
                     }
                 },
                 "targets": 2
@@ -206,7 +210,6 @@ $(document).ready(function () {
                 "orderable": false,
                 "render": function (data, type, row) {
                     if (data != null&&data!='') {
-                        console.log(data);
                         return "<button class=\"btn btn-success\" onclick=\"updateRemark('" + row.id + "','"+data+"')\">编辑</button>";
                     } else {
                         return "<button class='btn btn-danger' onclick='updateRemark(" + row.id + ")'>设置</button>";
@@ -346,4 +349,21 @@ function setRemark() {
 }
 function showUserMessage() {
     $('#userMessageDiv').show();
+}
+function mediaSearch() {
+    $.ajax({
+        cache: true,
+        type: "GET",
+        url: 'userMedias/getUserMediaCount',
+        data: {
+            mediaName: $("#tmediaName-search").val(),
+            startTime:$("#tstartTime-search").val(),
+            endTime: $("#tendTime-search").val()
+        },
+        async: false,
+        success: function (data) {
+            $("#mediaCount").val(data);
+        }
+    });
+
 }

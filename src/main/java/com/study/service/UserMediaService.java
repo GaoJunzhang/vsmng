@@ -21,11 +21,13 @@ public interface UserMediaService extends IService<UserMedia> {
 
     public PageInfo<UsereMediaBean> mediaPlayByUid(Integer uid, String startTime, String endTime, int start, int length);
 
-    public PageInfo<UserBean> userMediaStatistics(String username,String realyname, String startTime, String endTime, int start, int length);
+    public PageInfo<UserBean> userMediaStatistics(String username, String realyname, String startTime, String endTime, int start, int length);
 
     public int thisMonthPlayCount();
 
     public int totalPlayCount();
 
     public int totalSunPlayCount(Integer uid);
+
+    public int getUserMediaCount(String mediaName, String startTime, String endTime);
 }
