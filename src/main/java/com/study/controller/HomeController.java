@@ -139,6 +139,8 @@ public class HomeController {
         model.addAttribute("totalUsers",userService.totalUser());
         model.addAttribute("totalMedias",mediaService.totalMedia());
         if (flag){
+            model.addAttribute("uName",user.getUsername());
+            model.addAttribute("uid",user.getId());
             model.addAttribute("totalPlayCount",userMediaService.totalSunPlayCount(user.getId()));
             return "myMedia/mymedias";
         }else {

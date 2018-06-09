@@ -56,9 +56,9 @@ public class UserMediaController {
         }
         User user = userService.selectByUsername(username);
         Map map = new HashMap();
-        if (StringUtils.isEmpty(year)) {
+//        if (StringUtils.isEmpty(year)) {
             year = VTools.getSysYear();
-        }
+//        }
         List<MonthBean> list = userMediaService.statisticsByYear(Integer.parseInt(year), uid);
         if (user.getIsLimit()==1){
             map.put("sumCount", 100);

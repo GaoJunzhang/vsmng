@@ -11,7 +11,6 @@ $(document).ready(function(){
         dataType: "json",
         success: function(res){
             var data = [];
-            console.log(res)
             if (res.isLimit==0){
 
                 data[1] = { label: "已播"+res.sumPlayCount, data: Math.floor((res.sumPlayCount/res.sumCount)*100)+1 }
@@ -72,7 +71,30 @@ $(document).ready(function(){
 
             //Display graph
             var bar = $.plot($(".bars"), data, {
+                grid: { hoverable: true, clickable: true },
                 legend: true
+            });
+            $(".bars").bind("plothover", function (event, pos, item) {
+                if (item) {
+                    console.log(item)
+                    if (previousPoint != item.dataIndex) {
+                        previousPoint = item.dataIndex;
+
+                        $('#tooltip').fadeOut(200,function(){
+                            $(this).remove();
+                        });
+                        var x = item.datapoint[0],
+                            y = item.datapoint[1];
+
+                        maruti.flot_tooltip(item.pageX, item.pageY, x + " 月: " + y+"次");
+                    }
+
+                } else {
+                    $('#tooltip').fadeOut(200,function(){
+                        $(this).remove();
+                    });
+                    previousPoint = null;
+                }
             });
             if (res.isLimit==1){
                 $("#staticPid").hide();
@@ -217,4 +239,15 @@ function getQueryCondition1(data) {
     param.draw = data.draw;
     return param;
 }
+maruti = {
+    // === Tooltip for flot charts === //
+    flot_tooltip: function(x, y, contents) {
+
+        $('<div id="tooltip">' + contents + '</div>').css( {
+            top: y + 5,
+            left: x + 5
+        }).appendTo("body").fadeIn(200);
+    }
+}
+
 

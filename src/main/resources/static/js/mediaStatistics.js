@@ -50,17 +50,49 @@ $(document).ready(function () {
                 bars: {
                     show: true,
                     barWidth: 0.4,
-                    order: 1,
+                    order: 1
                 }
             });
 
 
             //Display graph
             var bar = $.plot($(".bars"), data, {
+                grid: { hoverable: true, clickable: true },
                 legend: true
+            });
+            $(".bars").bind("plothover", function (event, pos, item) {
+                if (item) {
+                    console.log(item)
+                    if (previousPoint != item.dataIndex) {
+                        previousPoint = item.dataIndex;
+
+                        $('#tooltip').fadeOut(200,function(){
+                            $(this).remove();
+                        });
+                        var x = item.datapoint[0],
+                            y = item.datapoint[1];
+
+                        maruti.flot_tooltip(item.pageX, item.pageY, x + " 月: " + y+"次");
+                    }
+
+                } else {
+                    $('#tooltip').fadeOut(200,function(){
+                        $(this).remove();
+                    });
+                    previousPoint = null;
+                }
             });
         }
     });
+    maruti = {
+        flot_tooltip: function(x, y, contents) {
+
+            $('<div id="tooltip">' + contents + '</div>').css( {
+                top: y + 5,
+                left: x + 5
+            }).appendTo("body").fadeIn(200);
+        }
+    }
     table = $('#datatable').DataTable({
         "dom": '<"top"i>rt<"bottom"flp><"clear">',
         "searching": false,

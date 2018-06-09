@@ -27,7 +27,8 @@
 <div th:include="common/menu :: menu"></div>
 
 <div id="content">
-
+    <input type="hidden" id="userId" th:value="${uid}" />
+    <input type="hidden" id="username" th:value="${uName}" />
     <div class="row-fluid">
         <div class="span6">
             <div class="widget-box">
@@ -130,7 +131,7 @@
 <script th:src="@{/js/layer.js}"></script>
 <script th:src="@{/js/jquery.flot.min.js}"></script>
 <script th:src="@{/js/jquery.flot.pie.min.js}"></script>
-<script th:src="@{/js/matrix.charts.js}"></script>
+<script th:src="@{/js/mymedias.js}"></script>
 <script th:src="@{/js/bootstrap-datepicker.js}"></script>
 <script th:src="@{/js/locales/bootstrap-datepicker.zh-CN.js}"></script>
 <script type="text/javascript">
