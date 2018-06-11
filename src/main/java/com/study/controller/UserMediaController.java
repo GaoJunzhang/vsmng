@@ -163,7 +163,9 @@ public class UserMediaController {
     public String getUserMediaCount(@RequestParam(required = false) String mediaName,
                                     @RequestParam(required = false) String startTime,
                                     @RequestParam(required = false) String endTime){
-
+        if (!StringUtils.isEmpty(endTime)) {
+            endTime += " 23:59:59";
+        }
         return userMediaService.getUserMediaCount(mediaName,startTime,endTime)+"";
     }
 }
